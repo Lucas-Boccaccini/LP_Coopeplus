@@ -15,7 +15,7 @@
     <style>
         @media (max-width: 576px) {
             .filtro {
-                height: 50vh;
+                height: 65vh;
                 width: 100vw !important;
             }
         }
@@ -57,7 +57,7 @@
     </header>
     <main>
         <div id="map" style="height: 400px;"></div>
-        
+
         <!-- Filtro -->
         <section class="my-3 container" id="filtro">
             <div class="row justify-content-center">
@@ -79,7 +79,6 @@
                     </a>
                 </div>
             </div>
-
             <div class="offcanvas offcanvas-end filtro" tabindex="-1" id="offcanvasRight"
                 aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
@@ -90,25 +89,59 @@
                     <div class="row">
                         <div class="col-12 mb-2">
                             <select class="form-select" data-live-search="true" id="provId" name="provId">
-                                <option value="-1" disabled selected>Seleccioná provincia</option>
+                                <option value="-1" disabled selected>Seleccione una provincia</option>
                             </select>
                         </div>
                         <div class="col-12 mb-2">
                             <select class="form-select" id="localidadId" name="localidadId">
-                                <option value="-1" disabled selected>Seleccioná localidad</option>
+                                <option value="-1" disabled selected>Seleccione una localidad</option>
                             </select>
                         </div>
                         <div class="col-12 mb-2">
                             <select class="form-select" id="rubroId" name="rubroId">
-                                <option value="-1" disabled selected>Seleccioná rubro</option>
+                                <option value="-1" disabled selected>Seleccione un rubro</option>
+                                <option value="1">TODOS</option>
                             </select>
                         </div>
-                        <div class="col-12 mb-2">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="mapaVisible">
-                                <label class="form-check-label" for="mapaVisible">Mostrar mapa</label>
+
+                        <div class="col-6 mb-2">
+                            <p>Porcetaje de descuento: </p>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="row gx-5">
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="10%" checked>
+                                        <label class="form-check-label" for="10%">
+                                            10%
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="15%" checked>
+                                        <label class="form-check-label" for="15%">
+                                            15%
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="mapaVisible"
+                                            checked>
+                                        <label class="form-check-label" for="mapaVisible">Mostrar mapa</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                       <div class="d-flex justify-content-center">
+                           <button class="btn btn-outline-primary mx-2 col-5">Limpiar</button>
+                           <button class="btn btn-primary mx-2 col-5">Aplicar</button>
                         </div>
                     </div>
                 </div>
@@ -118,14 +151,126 @@
 
         <!-- Cards -->
         <section class="container">
-            <div class="row" id="cardContainer">
-
-            </div>
+            <div class="row" id="cardContainer"></div>
         </section>
+        <footer>
+            <section id="sub-bar" class="container-fluid d-flex justify-content-center"
+                style="background-color: #dc3545!important;">
+                <a href="https://www.coopeplus.com.ar/Home/Consultas" class="mr-2 pr-4 py-3 text-decoration-none"
+                    style="color: #ffffff;">CONSULTAS</a>
+                <div class="border border-left mx-5" style="color:#FFF"></div>
+                <a href="https://www.coopeplus.com.ar/Home/InformacionUsuarioFinanciero"
+                    class="h-100 pl-3 py-3 text-decoration-none border-left border-white h-100"
+                    style="color: #ffffff;">INFORMACIÓN AL USUARIO FINANCIERO</a>
+            </section>
+            <p style="text-align: center; font-size: 12px; background: #004f9f; padding: 5px; margin: 0;">
+                <a href="https://www.coopeplus.com.ar/Home/ContratoAdhesion" target="_self" style="color: white;">
+                    Contratos de adhesión - Ley Nº 24.240 de Defensa al Consumidor
+                </a>
+            </p>
+            <section id="pre-footer" class="container py-5 px-5 w-75">
+                <div class="row mx-n5 align-items-center justify-content-center">
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="https://www.cooperativaobrera.coop/" target="_blank" rel="noopener noreferrer">
+                            <img src="/img/coopelogogris.png" class="img-fluid" alt="Coope">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="https://bahiablancaplazashopping.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="/img/bbplaza.png" class="img-fluid" alt="Coope">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="https://www.tarjetabbps.com.ar" target="_blank" rel="noopener noreferrer">
+                            <img src="/img/tarjetbbps.png" class="img-fluid" alt="Coope">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="http://coopeviajes.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="/img/coopeviajes.png" class="img-fluid" alt="Coope">
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <section id="footer" class="container py-4 border-top border-light">
+                <div class="row flex-column flex-md-row">
+                    <div class="col col-md-3 my-2 d-flex flex-column justify-content-around order-3">
+                        <div>
+                            <a href="http://www.bcra.gob.ar/BCRAyvos/usuarios_financieros.asp" target="_blank"
+                                rel="noopener noreferrer">
+                                <img src="/img/usuariosfinanciers.png" class="img-fluid"
+                                    alt="Usuarios Financieros">
+                            </a>
+                        </div>
+                        <div class="text-md-center">
+                            <a href="http://qr.afip.gob.ar/?qr=Lo5ruwccz5mMxrokHtaRVw,," target="_F960AFIPInfo"
+                                rel="noopener noreferrer">
+                                <img src="/img/data-fiscal.jpg" class="img-fluid " alt="data fiscal AFIP"
+                                    style="height:135px">
+                            </a>
+                        </div>
+                        <div class="text-md-center text-dark font-weight-lighter fontPie">
+                            <a href="https://www.coopeplus.com.ar/Home/DatosPersonales" class="text-decoration-none text-dark">Datos personales</a>
+                        </div>
+                    </div>
+                    <div class="col col-md-6 col-auto my-2 paddingLeftPie order-2">
+                        <h4 class="text-muted">CONTACTO</h4>
+                        <ul class="list-unstyled mt-2 fontPie">
+                            <li class="row mb-2">
+                                <i class="bi bi-geo-alt-fill text-muted col-1" style="font-size: 25px;"></i>
+                                <div class="col-11">
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Casa Central 19 de Mayo 271 Tel.
+                                        <a href="tel:+5492914550396"
+                                            class="text-decoration-none text-dark marginPie">0291-4550396</a>
+                                    </p><br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Bahía Blanca de Lunes a Viernes
+                                        de 8 a 17 hs.</p>
+                                </div>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-envelope-fill text-muted col-1" style="font-size: 25px;"></i>
+                                <div class="col-11">
+                                    <p class="text-dark font-weight-lighter d-inline ml-3"><a
+                                        href="mailto:comercial@nuevacard.com.ar"
+                                        class="text-decoration-none text-dark">comercial@nuevacard.com.ar</a></p><br>
+                                <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17 Hs.</p>
+                                </div>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-whatsapp text-muted col-1" style="font-size: 25px;"></i>
+                                <div class="col-11">
+                                    <p class="text-dark font-weight-lighter d-inline ml-3"><a
+                                        href="https://api.whatsapp.com/send?phone=5492914250963&amp;text=&amp;source=&amp;data=&amp;app_absent="
+                                        target="_blank" class="text-decoration-none text-dark"
+                                        rel="noopener noreferrer">0291-4250963</a></p><br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17 Hs.</p>
+                                </div>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-phone text-muted col-1" style="font-size: 25px;"></i>
+                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a href="tel:+54908103334343"
+                                        class="text-decoration-none text-dark">0810-333-4343</a></p>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-phone text-muted col-1" style="font-size: 25px;"></i>
+                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a href="tel:+54908009997447"
+                                        class="text-decoration-none text-dark">0800-999-7447</a> Todos los días de 9 a
+                                    21 Hs. </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col col-md-3 my-2 order-1">
+                        <h4 class="text-muted">QUIÉNES SOMOS</h4>
+                        <ul class="list-unstyled mt-2 fontPie">
+                            <li class="mb-2">
+                                <p class="text-dark font-weight-lighter d-inline ml-0"><a href="https://www.coopeplus.com.ar/Home/QuienesSomos"
+                                class="text-decoration-none text-dark">Nuestra tarjeta</a></p>
+                            </li>
 
-        <footer class="container">
-            <p class="float-end"><a href="#">Back to top</a></p>
-            <p>&copy; 2017-2023 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+                        </ul>
+                    </div>
+                </div>
+            </section>
         </footer>
     </main>
     <!-- BS5 -->

@@ -8,7 +8,7 @@ let mapa = document.getElementById("map")
 //Ocultar o mostrar el mapa cuando se le hace click al CheckBox
 mapaVisible.addEventListener("change", function() {
 
-    if (mapaVisible.checked) {
+    if (!mapaVisible.checked) {
         mapa.style.display = "none";
         filtro.style.paddingTop = "10vh";
     } else {
@@ -16,8 +16,6 @@ mapaVisible.addEventListener("change", function() {
         filtro.style.paddingTop = "0vh";
     }
 });
-
-
 var map = L.map('map').setView([-38.7183, -62.2661], 15);
 maxZoom: 18,
 
@@ -59,12 +57,23 @@ fetch('./dir.csv')
             };
         });
 
+        var selectedProvincia = (prov.options[prov.selectedIndex]).text;
+        var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
+        var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
         // Recorre el CSV y crea marcadores
         comercios.forEach(function (comercio) {
-            CargarFiltro(comercio);
-            SetMarker(comercio);
-            CrearCards(comercio);
-
+            {
+                if (
+                    (selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia) &&
+                    (selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad) &&
+                    (selectedRubro === "Seleccione un rubro" || comercio.Rubro === selectedRubro)
+                ){
+                    // Cumple con los criterios, cargar y mostrar el marcador y la tarjeta
+                    CargarFiltro(comercio);
+                    SetMarker(comercio);
+                    CrearCards(comercio);
+                }
+            }
         });
     })
     .catch(function (error) {
@@ -79,7 +88,7 @@ fetch('./dir.csv')
             var option = document.createElement("option");
             option.text = comercio.Provincia;
             prov.add(option);
-    
+
             // Marcar la localidad como procesada
             provinciasProcesadas[comercio.Provincia] = true;
         }
@@ -89,7 +98,7 @@ fetch('./dir.csv')
             var option = document.createElement("option");
             option.text = comercio.Localidad;
             localidad.add(option);
-    
+
             // Marcar la localidad como procesada
             localidadesProcesadas[comercio.Localidad] = true;
         }
@@ -99,14 +108,14 @@ fetch('./dir.csv')
             var option = document.createElement("option");
             option.text = comercio.Rubro;
             rubro.add(option);
-    
+
             // Marcar la localidad como procesada
             rubrosProcesadas[comercio.Rubro] = true;
         }
     }
 
     function SetMarker(comercio){
-        var marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
+            var marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
             //iconos 10% y 15%
             var customIcon = L.icon({
                 iconUrl: 'img/' + comercio.Dto + '.jpg',
@@ -115,32 +124,33 @@ fetch('./dir.csv')
                 popupAnchor: [0, -40]
             });
             marker.setIcon(customIcon);
-    
+
             // Contenido personalizado del marcador con valores del comercio
             var contenido =
-                '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
-                '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
-                '<b>Ubicación:</b> ' + comercio.Direccion + '<br>' +
-                '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
-                '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
-    
-            // Asignar el contenido al marcador
-            marker.bindPopup(contenido).openPopup();
-    }
+            '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
+            '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
+            '<b>Ubicación:</b> ' + comercio.Direccion + '<br>' +
+            '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
+            '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
 
-    function CrearCards(comercio) {
+            // Asignar el contenido al marcador
+            // marker.bindPopup(contenido).openPopup();
+            marker.bindPopup(contenido);
+        }
+
+    function CrearCards(comercio){
         // Crear elementos HTML para la card
         var cardContainer = document.getElementById("cardContainer");
-    
+
         var cardCol = document.createElement("div");
         cardCol.classList.add("col-lg-3", "col-md-6", "mt-3");
-    
+
         var card = document.createElement("div");
         card.classList.add("card", "mb-3");
-    
+
         var cardRow = document.createElement("div");
         cardRow.classList.add("row", "g-0");
-    
+
         // Añadir el badge de dto
         var dtoBadge = document.createElement("div");
         dtoBadge.style.top = "-0.8rem";
@@ -151,11 +161,11 @@ fetch('./dir.csv')
         }else{
             dtoBadge.classList.add("badge", "bg-danger", "text-white", "position-absolute", "w-50");
         }
-    
+
         // Añadir la imagen
         var imgCol = document.createElement("div");
         imgCol.classList.add("col-4", "col-md-12");
-    
+
         var img = document.createElement("img");
         img.src = "./img/e36258b3c74f08054a974a5fe1703f9c.jpg";
         img.classList.add("img-fluid");
@@ -165,38 +175,38 @@ fetch('./dir.csv')
         // Añadir el contenido de la card
         var contentCol = document.createElement("div");
         contentCol.classList.add("col-8", "col-md-12");
-    
+
         var cardBody = document.createElement("div");
         cardBody.classList.add("card-body", "pt-md-0");
-    
+
         var comercioTitle = document.createElement("h6");
         comercioTitle.classList.add("fw-bold", "text-truncate", "text-center");
         comercioTitle.innerText = comercio.NomComercio;
-    
+
         var hr = document.createElement("hr");
         hr.style.border = "1px solid #4273b4";
-    
+
         var rubroP = document.createElement("p");
         rubroP.classList.add("text-truncate", "mb-1");
         rubroP.innerText = comercio.Rubro;
-    
+
         var dirP = document.createElement("p");
         dirP.classList.add("text-truncate", "mb-1");
         dirP.innerText = comercio.Direccion;
-    
+
         var localidadP = document.createElement("p");
         localidadP.classList.add("text-truncate", "mb-1");
         localidadP.innerText = comercio.Localidad;
-    
+
         var provinciaP = document.createElement("p");
         provinciaP.classList.add("text-truncate", "mb-1");
         provinciaP.innerText = comercio.Provincia;
-    
+
         var nroTelP = document.createElement("p");
         nroTelP.classList.add("text-truncate", "mb-1");
         nroTelP.style.color = "#5a5c69";
         nroTelP.innerHTML = `<i class="fas fa-phone"></i> ${comercio.Prefijo} ${comercio.NroTel}`;
-    
+
         // Construir la estructura de la card
         cardBody.appendChild(comercioTitle);
         cardBody.appendChild(hr);
@@ -205,21 +215,16 @@ fetch('./dir.csv')
         cardBody.appendChild(localidadP);
         cardBody.appendChild(provinciaP);
         cardBody.appendChild(nroTelP);
-    
+
         contentCol.appendChild(cardBody);
-    
+
         cardRow.appendChild(dtoBadge);
         cardRow.appendChild(imgCol);
         cardRow.appendChild(contentCol);
-    
+
         card.appendChild(cardRow);
         cardCol.appendChild(card);
-    
+
         // Agregar la card al contenedor
         cardContainer.appendChild(cardCol);
     }
-    
-    
-    
-    
-    

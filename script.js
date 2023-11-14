@@ -20,7 +20,7 @@ maxZoom: 18,
     var rubrosProcesadas = {};
 
 // Cargar y analizar el archivo CSV
-fetch('./prueba.csv')
+fetch('./dir.csv')
     .then(function (response) {
         return response.text();
     })
@@ -145,7 +145,7 @@ fetch('./prueba.csv')
         img.classList.add("img-fluid");
         img.style.height = "200px";
         img.style.width = "300px";
-    
+        imgCol.appendChild(img)
         // Añadir el contenido de la card
         var contentCol = document.createElement("div");
         contentCol.classList.add("col-8", "col-md-12");
@@ -193,7 +193,7 @@ fetch('./prueba.csv')
         contentCol.appendChild(cardBody);
     
         cardRow.appendChild(dtoBadge);
-        cardRow.appendChild(imgCol.appendChild(img));
+        cardRow.appendChild(imgCol);
         cardRow.appendChild(contentCol);
     
         card.appendChild(cardRow);

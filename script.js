@@ -1,6 +1,22 @@
 let prov = document.getElementById("provId");
 let localidad = document.getElementById("localidadId");
 let rubro = document.getElementById("rubroId");
+let mapaVisible = document.getElementById("mapaVisible");
+let filtro = document.getElementById("filtro");
+let mapa = document.getElementById("map")
+
+//Ocultar o mostrar el mapa cuando se le hace click al CheckBox
+mapaVisible.addEventListener("change", function() {
+
+    if (mapaVisible.checked) {
+        mapa.style.display = "none";
+        filtro.style.paddingTop = "10vh";
+    } else {
+        mapa.style.display = "block";
+        filtro.style.paddingTop = "0vh";
+    }
+});
+
 
 var map = L.map('map').setView([-38.7183, -62.2661], 15);
 maxZoom: 18,

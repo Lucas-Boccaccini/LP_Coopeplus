@@ -19,15 +19,16 @@
                 width: 100vw !important;
             }
         }
-        #map{
+
+        #map {
             margin-top: 10vh;
         }
     </style>
-         
+
 </head>
 
 <body>
-    <header data-bs-theme="dark" >
+    <header data-bs-theme="dark">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="https://www.coopeplus.com.ar/">
@@ -55,46 +56,10 @@
         </nav>
     </header>
     <main>
-        <!-- carousel -->
-        <!-- <div class="pr-0 mb-3">
-            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class=""
-                        aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"
-                        aria-label="Slide 2" class=""></button>
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2"
-                        aria-label="Slide 3" class="active" aria-current="true"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item" data-bs-interval="10000">
-                        <img src="img/slider-coopeplus1.svg" class="d-block img-fluid w-100" alt="..."
-                            style="height: 350px;">
-                    </div>
-                    <div class="carousel-item" data-bs-interval="2000">
-                        <img src="img/slider-coopeplus2.svg" class="d-block img-fluid w-100" alt="..."
-                            style="height: 350px;">
-                    </div>
-                    <div class="carousel-item active">
-                        <img src="img/slider-coopeplus3.svg" class="d-block img-fluid w-100" alt="..."
-                            style="height: 350px;">
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
-        </div> -->
         <div id="map" style="height: 400px;"></div>
+        
         <!-- Filtro -->
-        <section class="my-3 container">
+        <section class="my-3 container" id="filtro">
             <div class="row justify-content-center">
                 <div class="col-md-6 col-9 mb-2">
                     <div class="input-group">
@@ -138,17 +103,24 @@
                                 <option value="-1" disabled selected>Seleccioná rubro</option>
                             </select>
                         </div>
+                        <div class="col-12 mb-2">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="mapaVisible">
+                                <label class="form-check-label" for="mapaVisible">Mostrar mapa</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-      
+
         <!-- Cards -->
         <section class="container">
             <div class="row" id="cardContainer">
-                
-            </div><!-- /.row -->
+
+            </div>
         </section>
 
         <footer class="container">
@@ -164,13 +136,11 @@
     <script src="https://kit.fontawesome.com/a3c0028fb8.js" crossorigin="anonymous"></script>
     <!-- Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
-    
+
 </body>
 
 </html>
-
-

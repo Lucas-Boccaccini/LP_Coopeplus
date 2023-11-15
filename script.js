@@ -19,9 +19,10 @@ mapaVisible.addEventListener("change", function () {
         filtro.style.paddingTop = "0vh";
     }
 });
+
 //#region Configuaracion mapa
 
-var map = L.map('map').setView([-38.7183, -62.2661], 5);
+var map = L.map('map').setView([-38.7183, -62.2661], 8);
 maxZoom: 18,
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -43,6 +44,15 @@ var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 
+prov.addEventListener("change", function(){
+    selectedProvincia = (prov.options[prov.selectedIndex]).text;
+});
+localidad.addEventListener("change", function(){
+    selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
+});
+rubro.addEventListener("change", function(){
+    selectedRubro = (rubro.options[rubro.selectedIndex]).text;
+});
 // Cargar y analizar el archivo CSV
 fetch('./dir.csv')
     .then(function (response) {
@@ -234,21 +244,27 @@ function LimpiarFiltro() {
     dto10.checked = true;
     dto15.checked = true;
 
-    var changeEvent = new Event('change');
-    mapaVisible.dispatchEvent(changeEvent);
+    var mapaVisibleChange = new Event('change');
+    prov.dispatchEvent(mapaVisibleChange);
 
+    var provChange = new Event('change');
+    localidad.dispatchEvent(provChange);
+
+    var localidadChange = new Event('change');
+    rubro.dispatchEvent(localidadChange);
+
+    //volver a cargar todos los comercios
+    CargarComercios()
 }
 
 function CargarComercios() {
     LimpiarComercios();
-   
     comerciosFiltrados.forEach(function (comercio) {
         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
             const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
             const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
             const cumpleDescuento10 = dto10.checked && comercio.Dto === "10";
             const cumpleDescuento15 = dto15.checked && comercio.Dto === "15";
-        
             if (cumpleProvincia && cumpleLocalidad && cumpleRubro && (cumpleDescuento10 || cumpleDescuento15)) {
                 // Cumple con los criterios
                     SetMarker(comercio);

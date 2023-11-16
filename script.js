@@ -6,6 +6,7 @@ let filtro = document.getElementById("filtro");
 let mapa = document.getElementById("map");
 let dto10 = document.getElementById("10%");
 let dto15 = document.getElementById("15%");
+let dto20 = document.getElementById("20%");
 let btnClose = document.getElementById("btn-close");
 
 //Ocultar o mostrar el mapa cuando se le hace click al CheckBox
@@ -22,7 +23,7 @@ mapaVisible.addEventListener("change", function () {
 
 //#region Configuaracion mapa
 
-var map = L.map('map').setView([-38.7183, -62.2661], 8);
+var map = L.map('map').setView([-38.7183, -62.2661], 14);
 maxZoom: 18,
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -38,22 +39,26 @@ attributionControl.setPrefix('Leaflet'),
 // Objeto para hacer un seguimiento de las localidades procesadas
 var provinciasProcesadas = {};
 var localidadesProcesadas = {};
-var rubrosProcesadas = {};
+var rubrosProcesados = {};
 var comerciosFiltrados = [];  // Arreglo para almacenar los comercios filtrados
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 
-prov.addEventListener("change", function(){
+prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
+    CargarFiltro(comerciosFiltrados);
 });
-localidad.addEventListener("change", function(){
+localidad.addEventListener("change", function () {
     selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
+    CargarFiltro(comerciosFiltrados);
 });
-rubro.addEventListener("change", function(){
+rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
+    CargarFiltro(comerciosFiltrados);
 });
-// Cargar y analizar el archivo CSV
+
+//#region Cargar y analizar el archivo CSV
 fetch('./dir.csv')
     .then(function (response) {
         return response.text();
@@ -87,38 +92,39 @@ fetch('./dir.csv')
     .catch(function (error) {
         console.error("Error al cargar el CSV:", error);
     });
+//#endregion
+
 
 function CargarFiltro(comercio) {
-    // Verificar si la provincia ya ha sido procesada
-
+    // Cargar select de provincias
     if (!provinciasProcesadas[comercio.Provincia]) {
-        // Agregar la provincia al mapa
-        var option = document.createElement("option");
-        option.text = comercio.Provincia;
-        prov.add(option);
-
-        // Marcar la localidad como procesada
+        var optionProv = document.createElement("option");
+        optionProv.text = comercio.Provincia;
+        prov.add(optionProv);
         provinciasProcesadas[comercio.Provincia] = true;
     }
-    // Verificar si la localidad ya ha sido procesada
-    if (!localidadesProcesadas[comercio.Localidad]) {
-        // Agregar la localidad al mapa
-        var option = document.createElement("option");
-        option.text = comercio.Localidad;
-        localidad.add(option);
 
-        // Marcar la localidad como procesada
+    // Cargar select de localidades
+    if (
+        (comercio.Provincia === selectedProvincia) &&
+        !localidadesProcesadas[comercio.Localidad]
+    ) {
+        var optionLoc = document.createElement("option");
+        optionLoc.text = comercio.Localidad;
+        localidad.add(optionLoc);
         localidadesProcesadas[comercio.Localidad] = true;
     }
-    // Verificar si el rubro ya ha sido procesada
-    if (!rubrosProcesadas[comercio.Rubro]) {
-        // Agregar la localidad al mapa
-        var option = document.createElement("option");
-        option.text = comercio.Rubro;
-        rubro.add(option);
 
-        // Marcar la localidad como procesada
-        rubrosProcesadas[comercio.Rubro] = true;
+    // Cargar select de rubros
+    if (
+        (comercio.Provincia === selectedProvincia) &&
+        (comercio.Localidad === selectedLocalidad) &&
+        !rubrosProcesados[comercio.Rubro]
+    ) {
+        var optionRubro = document.createElement("option");
+        optionRubro.text = comercio.Rubro;
+        rubro.add(optionRubro);
+        rubrosProcesados[comercio.Rubro] = true;
     }
 }
 
@@ -236,13 +242,54 @@ function CrearCards(comercio) {
     cardContainer.appendChild(cardCol);
 }
 
+function CrearCheckDto(comercio) {
+    let = checkContainer = document.getElementById("checkContainer");
+    // Verificar si ya existe un checkbox con el mismo valor
+    if (document.getElementById(comercio.Dto + "%")) {
+        return; // No crear otro checkbox si ya existe uno con el mismo valor
+    }
+
+    // Crear un elemento div con la clase "col-4"
+    var divCol = document.createElement("div");
+    divCol.className = "col-4";
+
+    // Crear un elemento div con la clase "form-check"
+    var divFormCheck = document.createElement("div");
+    divFormCheck.className = "form-check";
+
+    // Crear un elemento input de tipo checkbox con la clase "form-check-input"
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    // checkbox.className = "form-check-input";
+    checkbox.classList.add("form-check-input", "dto");
+
+    checkbox.value = comercio.Dto;
+    checkbox.id = comercio.Dto + "%";
+    checkbox.checked = true;
+
+    // Crear un elemento label con la clase "form-check-label"
+    var label = document.createElement("label");
+    label.className = "form-check-label";
+    label.htmlFor = comercio.Dto + "%";
+    label.textContent = comercio.Dto + "%";
+
+    // Agregar el input y el label al div con la clase "form-check"
+    divFormCheck.appendChild(checkbox);
+    divFormCheck.appendChild(label);
+
+    // Agregar el div con la clase "form-check" al div con la clase "col-4"
+    divCol.appendChild(divFormCheck);
+
+    // Agregar el div con la clase "col-4" al body o al elemento que desees
+    checkContainer.appendChild(divCol);
+}
+
 function LimpiarFiltro() {
-    prov.selectedIndex = 0;
-    localidad.selectedIndex = 0;
+    /* Agregar que cuando limpie el filtro vuelva hacer foco en bahia blanca */
+    prov.selectedIndex = 0; //por defecto Buenos aires
+    localidad.selectedIndex = 0; //por defecto Bahia blanca
     rubro.selectedIndex = 0;
     mapaVisible.checked = true;
-    dto10.checked = true;
-    dto15.checked = true;
 
     var mapaVisibleChange = new Event('change');
     prov.dispatchEvent(mapaVisibleChange);
@@ -253,36 +300,53 @@ function LimpiarFiltro() {
     var localidadChange = new Event('change');
     rubro.dispatchEvent(localidadChange);
 
-    //volver a cargar todos los comercios
+    check = document.querySelectorAll('.dto');
+    check.forEach(dto =>{
+        dto.checked = true
+    })
+
+    //Volver a cargar todos los comercios
     CargarComercios()
 }
 
 function CargarComercios() {
+    //Limpia los comercios que estan por defecto o seleccionados previamente
     LimpiarComercios();
+    //Crea los check con los descuentos correspondientes
+    comerciosFiltrados.forEach(element => {
+        CrearCheckDto(element);
+    });
+    //Filtra los comercios en base a las opciones seleccionadas
     comerciosFiltrados.forEach(function (comercio) {
         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
-            const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
-            const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
-            const cumpleDescuento10 = dto10.checked && comercio.Dto === "10";
-            const cumpleDescuento15 = dto15.checked && comercio.Dto === "15";
-            if (cumpleProvincia && cumpleLocalidad && cumpleRubro && (cumpleDescuento10 || cumpleDescuento15)) {
-                // Cumple con los criterios
-                    SetMarker(comercio);
-                    CrearCards(comercio);
-            }
+        const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
+        const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
+        var checkboxes = document.querySelectorAll('.dto');
+        const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
+            return checkbox.checked && comercio.Dto === checkbox.value;
         });
+        if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
+            // Cumple con los criterios
+            SetMarker(comercio);
+            CrearCards(comercio);
+        }
+    });
     //Cerrar menu filtros
     btnClose.click();
 }
 
-function LimpiarComercios(){
-    // Limpiar contenido
+function LimpiarComercios() {
+    // Elimina el marcador
     map.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
             map.removeLayer(layer);
         }
     });
 
+    // Elimina las cards
     var cardContainer = document.getElementById("cardContainer");
-    cardContainer.innerHTML = ""; 
+    cardContainer.innerHTML = "";
+
+    map.setView([-38.7183, -62.2661], 14);
 }
+

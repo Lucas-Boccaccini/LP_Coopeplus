@@ -44,18 +44,17 @@ var comerciosFiltrados = [];  // Arreglo para almacenar los comercios filtrados
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
-
+var lastSelectedProvincia = {};
 prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
-    CargarFiltro(comerciosFiltrados);
+    CargarFiltro();
 });
 localidad.addEventListener("change", function () {
     selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
-    CargarFiltro(comerciosFiltrados);
+    CargarFiltro();
 });
 rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
-    CargarFiltro(comerciosFiltrados);
 });
 
 //#region Cargar y analizar el archivo CSV
@@ -84,7 +83,7 @@ fetch('./dir.csv')
 
         // Recorre el CSV y crea marcadores
         comercios.forEach(function (comercio) {
-            CargarFiltro(comercio);
+            CargarFiltro();
             comerciosFiltrados.push(comercio);  // Almacena el comercio filtrado
         });
         CargarComercios();
@@ -95,36 +94,85 @@ fetch('./dir.csv')
 //#endregion
 
 
-function CargarFiltro(comercio) {
-    // Cargar select de provincias
-    if (!provinciasProcesadas[comercio.Provincia]) {
-        var optionProv = document.createElement("option");
-        optionProv.text = comercio.Provincia;
-        prov.add(optionProv);
-        provinciasProcesadas[comercio.Provincia] = true;
-    }
+// function CargarFiltro() {
+//     comerciosFiltrados.forEach(function (comercio) {
+//          // // Cargar select de provincias
+//     if (!provinciasProcesadas[comercio.Provincia]) {
+//         var optionProv = document.createElement("option");
+//         optionProv.text = comercio.Provincia;
+//         prov.add(optionProv);
+//         provinciasProcesadas[comercio.Provincia] = true;
+//     }
 
-    // Cargar select de localidades
-    if (
-        (comercio.Provincia === selectedProvincia) &&
-        !localidadesProcesadas[comercio.Localidad]
-    ) {
-        var optionLoc = document.createElement("option");
-        optionLoc.text = comercio.Localidad;
-        localidad.add(optionLoc);
-        localidadesProcesadas[comercio.Localidad] = true;
-    }
+//     // Cargar select de localidades
+//     if (
+//         (comercio.Provincia === selectedProvincia) &&
+//         !localidadesProcesadas[comercio.Localidad]
+//     ) {
+//         var optionLoc = document.createElement("option");
+//         optionLoc.text = comercio.Localidad;
+//         localidad.add(optionLoc);
+//         localidadesProcesadas[comercio.Localidad] = true;
+//     }
 
-    // Cargar select de rubros
-    if (
-        (comercio.Provincia === selectedProvincia) &&
-        (comercio.Localidad === selectedLocalidad) &&
-        !rubrosProcesados[comercio.Rubro]
-    ) {
-        var optionRubro = document.createElement("option");
-        optionRubro.text = comercio.Rubro;
-        rubro.add(optionRubro);
-        rubrosProcesados[comercio.Rubro] = true;
+//     // Cargar select de rubros
+//     if (
+//         (comercio.Provincia === selectedProvincia) &&
+//         (comercio.Localidad === selectedLocalidad) &&
+//         !rubrosProcesados[comercio.Rubro]
+//     ) {
+//         var optionRubro = document.createElement("option");
+//         optionRubro.text = comercio.Rubro;
+//         rubro.add(optionRubro);
+//         rubrosProcesados[comercio.Rubro] = true;
+//     }
+//     });
+// }
+
+function CargarFiltro() {
+    // Limpiar select de localidades
+    localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
+    // Limpiar select de rubros
+    rubro.innerHTML = '<option value="-1" disabled selected>Seleccione un rubro</option>';
+
+    comerciosFiltrados.forEach(function (comercio) {
+        // Cargar select de provincias
+        if (!provinciasProcesadas[comercio.Provincia]) {
+            var optionProv = document.createElement("option");
+            optionProv.text = comercio.Provincia;
+            prov.add(optionProv);
+            provinciasProcesadas[comercio.Provincia] = true;
+        }
+
+        // Cargar select de localidades
+        if (
+            (comercio.Provincia === selectedProvincia) &&
+            !localidadesProcesadas[comercio.Localidad]
+        ) {
+            
+            var optionLoc = document.createElement("option");
+            optionLoc.text = comercio.Localidad;
+            localidad.add(optionLoc);
+            localidadesProcesadas[comercio.Localidad] = true;
+        }
+
+        // Cargar select de rubros
+        if (
+            (comercio.Provincia === selectedProvincia) &&
+            (comercio.Localidad === selectedLocalidad) &&
+            !rubrosProcesados[comercio.Rubro]
+        ) {
+            var optionRubro = document.createElement("option");
+            optionRubro.text = comercio.Rubro;
+            rubro.add(optionRubro);
+            rubrosProcesados[comercio.Rubro] = true;
+        }
+    });
+
+    // Restablecer localidadesProcesadas cuando cambias de provincia
+    if (selectedProvincia !== lastSelectedProvincia) {
+        localidadesProcesadas = {};
+        lastSelectedProvincia = selectedProvincia;
     }
 }
 
@@ -329,6 +377,9 @@ function CargarComercios() {
             // Cumple con los criterios
             SetMarker(comercio);
             CrearCards(comercio);
+            if(selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad"){
+                map.setView([comercio.Latitud, comercio.Longitud], 14);
+            }
         }
     });
     //Cerrar menu filtros

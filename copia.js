@@ -41,8 +41,6 @@ var provinciasProcesadas = {};
 var localidadesProcesadas = {};
 var rubrosProcesados = {};
 var comerciosFiltrados = [];  // Arreglo para almacenar los comercios filtrados
-// var selectedProvincia = (prov.options[prov.selectedIndex]).text;
-// var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedProvincia = "Provincia de Buenos Aires";
 var selectedLocalidad = "BAHÍA BLANCA";
 
@@ -240,7 +238,6 @@ function CargarProvincias() {
 
 function CargarLocalidades() {
     // Limpia opciones antiguas
-    var localidadesProcesadas = {};
     // localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
     // localidad.innerHTML = '<option value="-1" disabled selected>BAHÍA BLANCA</option>';
 
@@ -260,10 +257,12 @@ function CargarLocalidades() {
         }
     });
 }
+
+
 function CargarRubros() {
     // Limpia opciones antiguas
     var rubrosProcesados = {};
-    rubro.innerHTML = '<option value="-1" disabled selected>TODOS</option>';
+    rubro.innerHTML = '<option value="-1" selected>TODOS</option>';
 
     // Cargar nuevas opciones de rubros
     comerciosFiltrados.forEach(function (comercio) {
@@ -446,9 +445,6 @@ function LimpiarFiltro() {
     // prov.selectedIndex = 0; //por defecto Buenos aires
     // localidad.selectedIndex = 0; //por defecto Bahia blanca
     // rubro.selectedIndex = 0;
-    // prov.selectedIndex = 0; //por defecto Buenos aires
-    // localidad.selectedIndex = 0; //por defecto Bahia blanca
-    // rubro.selectedIndex = 0;
 
     selectedProvincia = "Provincia de Buenos Aires";
     selectedLocalidad = "BAHÍA BLANCA";
@@ -471,8 +467,9 @@ function LimpiarFiltro() {
     })
 
     //Volver a cargar todos los comercios
-    // CargarFiltro();
-       
+    CargarProvincias();
+    CargarLocalidades();
+    CargarRubros();
     CargarComercios();
 }
 

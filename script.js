@@ -46,12 +46,13 @@ var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 var lastSelectedProvincia = {};
 prov.addEventListener("change", function () {
-    // selectedProvincia = (prov.options[prov.selectedIndex]).text;
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
+    //CargarFiltro();
     CargarLocalidades();
 });
 localidad.addEventListener("change", function () {
     selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
+    //CargarFiltro();
     CargarRubros();
 });
 rubro.addEventListener("change", function () {
@@ -89,13 +90,8 @@ fetch('./dir.csv')
             comerciosFiltrados.push(comercio);
         });
         // CargarFiltro();
-        // Configuración inicial
-        selectedProvincia = "Provincia de Buenos Aires";
-        selectedLocalidad = "BAHÍA BLANCA";
-        selectedRubro = "TODOS";
-
         CargarProvincias();
-       
+        CargarLocalidades();
         /*---*/
         CargarComercios();
     })
@@ -139,56 +135,10 @@ fetch('./dir.csv')
 //     });
 // }
 
-// function CargarFiltro() {
-//     // Limpiar select de provincias
-//     //prov.innerHTML = '<option value="-1" disabled selected>Seleccione una provincia</option>';
-//     // Limpiar select de localidades
-//     localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
-//     // Limpiar select de rubros
-//     rubro.innerHTML = '<option value="-1" disabled selected>Seleccione un rubro</option>';
-
-//     comerciosFiltrados.forEach(function (comercio) {
-//         // Cargar select de provincias
-//         if (!provinciasProcesadas[comercio.Provincia]) {
-//             var optionProv = document.createElement("option");
-//             optionProv.text = comercio.Provincia;
-//             prov.add(optionProv);
-//             provinciasProcesadas[comercio.Provincia] = true;
-//         }
-
-//         // Cargar select de localidades
-//         if (
-//             (comercio.Provincia === selectedProvincia) &&
-//             !localidadesProcesadas[comercio.Localidad]
-//         ) {
-//             var optionLoc = document.createElement("option");
-//             optionLoc.text = comercio.Localidad;
-//             localidad.add(optionLoc);
-//             localidadesProcesadas[comercio.Localidad] = true;
-
-//             // Establecer la opción seleccionada en el nuevo valor
-//             //localidad.value = selectedLocalidad;
-//         }
-
-//         // Cargar select de rubros
-//         if (
-//             (comercio.Provincia === selectedProvincia) &&
-//             (comercio.Localidad === selectedLocalidad) &&
-//             !rubrosProcesados[comercio.Rubro]
-//         ) {
-//             var optionRubro = document.createElement("option");
-//             optionRubro.text = comercio.Rubro;
-//             rubro.add(optionRubro);
-//             rubrosProcesados[comercio.Rubro] = true;
-
-//             // Establecer la opción seleccionada en el nuevo valor
-//             // rubro.value = selectedRubro;
-//         }
-//     });
-// }
 
 function CargarProvincias() {
     // Limpia opciones antiguas
+    // prov.innerHTML = '<option value="-1"selected>Provincia de Buenos Aires</option>';
     prov.innerHTML = '<option value="-1" disabled selected>Seleccione una provincia</option>';
 
 
@@ -205,7 +155,8 @@ function CargarProvincias() {
 
 function CargarLocalidades() {
     // Limpia opciones antiguas
-    var localidadesProcesadas = {};
+    localidadesProcesadas = {};
+    // localidad.innerHTML = '<option value="-1" disabled selected>BAHÍA BLANCA</option>';
     localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
 
     // Cargar nuevas opciones de localidades
@@ -224,10 +175,11 @@ function CargarLocalidades() {
         }
     });
 }
+
 function CargarRubros() {
     // Limpia opciones antiguas
     var rubrosProcesados = {};
-    //rubro.innerHTML = '<option value="-1" selected>TODOS</option>';
+    rubro.innerHTML = '<option value="-1" selected>TODOS</option>';
 
     // Cargar nuevas opciones de rubros
     comerciosFiltrados.forEach(function (comercio) {
@@ -406,9 +358,6 @@ function CrearCheckDto(comercio) {
 function LimpiarFiltro() {
 
     /* Agregar que cuando limpie el filtro vuelva hacer foco en bahia blanca */
-    // prov.selectedIndex = 0; //por defecto Buenos aires
-    // localidad.selectedIndex = 0; //por defecto Bahia blanca
-    // rubro.selectedIndex = 0;
     prov.selectedIndex = 0; //por defecto Buenos aires
     localidad.selectedIndex = 0; //por defecto Bahia blanca
     rubro.selectedIndex = 0;

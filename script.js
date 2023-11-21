@@ -44,7 +44,7 @@ var comerciosFiltrados = [];  // Arreglo para almacenar los comercios filtrados
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
-var lastSelectedProvincia = {};
+//var lastSelectedProvincia = {};
 prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
     //CargarFiltro();
@@ -138,9 +138,7 @@ fetch('./dir.csv')
 
 function CargarProvincias() {
     // Limpia opciones antiguas
-    // prov.innerHTML = '<option value="-1"selected>Provincia de Buenos Aires</option>';
-    prov.innerHTML = '<option value="-1" disabled selected>Seleccione una provincia</option>';
-
+    prov.innerHTML = '<option value="-1" disabled>Seleccione una provincia</option>';
 
     // Cargar nuevas opciones de provincias
     comerciosFiltrados.forEach(function (comercio) {
@@ -149,6 +147,12 @@ function CargarProvincias() {
             optionProv.text = comercio.Provincia;
             prov.add(optionProv);
             provinciasProcesadas[comercio.Provincia] = true;
+
+            // Establecer el atributo selected si la provincia es "Provincia de Buenos Aires"
+            if (comercio.Provincia === "Provincia de Buenos Aires") {
+                optionProv.selected = true;
+                selectedProvincia = "Provincia de Buenos Aires"; // Actualizar la variable selectedProvincia
+            }
         }
     });
 }
@@ -169,6 +173,11 @@ function CargarLocalidades() {
             optionLoc.text = comercio.Localidad;
             localidad.add(optionLoc);
             localidadesProcesadas[comercio.Localidad] = true;
+
+            if (comercio.Localidad === "BAHÍA BLANCA") {
+                optionLoc.selected = true;
+                selectedLocalidad = "BAHÍA BLANCA"; // Actualizar la variable selectedProvincia
+            }
         }
     });
 }

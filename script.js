@@ -169,9 +169,6 @@ function CargarLocalidades() {
             optionLoc.text = comercio.Localidad;
             localidad.add(optionLoc);
             localidadesProcesadas[comercio.Localidad] = true;
-
-            // Establecer la opción seleccionada en el nuevo valor
-            //localidad.value = selectedLocalidad;
         }
     });
 }
@@ -230,7 +227,7 @@ function CrearCards(comercio) {
     cardCol.classList.add("col-lg-3", "col-md-6", "mt-3");
 
     var card = document.createElement("div");
-    card.classList.add("card", "mb-3");
+    card.classList.add("card", "mb-3", "border", "border-2");
 
     var cardRow = document.createElement("div");
     cardRow.classList.add("row", "g-0");

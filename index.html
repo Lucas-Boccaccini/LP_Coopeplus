@@ -13,21 +13,24 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     </style>
     <style>
+        #map {
+            margin-top: 10vh;
+        }
         @media (max-width: 576px) {
             .filtro {
                 height: 65vh;
                 width: 100vw !important;
             }
+            #map {
+            margin-top: 8vh;
+        }
         }
 
-        #map {
-            margin-top: 10vh;
-        }
 
     </style>
 
 </head>
-<body>
+<body class="bg-light">
     <header data-bs-theme="dark">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
             <div class="container-fluid">
@@ -59,7 +62,7 @@
 
         <!-- Filtro -->
         <section class="my-3 container" id="filtro">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" style="max-width:100%">
                 <div class="col-md-6 col-9 mb-2">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Buscar..." id="buscar"
@@ -86,22 +89,30 @@
                 </div>
                 <div class="offcanvas-body">
                     <div class="row mw-100">
-                        <div class="col-12 mb-2">
+                        <div class="col-md-3 col-12 mb-0 mb-md-2">
+                            <p class="m-0">Provincia:</p>
+                        </div>
+                        <div class="col-md-9 col-12 mb-2">
                             <select class="form-select" data-live-search="true" id="provId" name="provId">
                                 <option value="-1" disabled selected>Seleccione una provincia</option>
                             </select>
                         </div>
-                        <div class="col-12 mb-2">
+                        <div class="col-md-3 col-12 mb-0 mb-md-2">
+                            <p class="m-0">Localidad:</p>
+                        </div>
+                        <div class="col-md-9 col-12 mb-2">
                             <select class="form-select" id="localidadId" name="localidadId">
                                 <option value="-1" disabled selected>Seleccione una localidad</option>
                             </select>
                         </div>
-                        <div class="col-12 mb-2">
+                        <div class="col-md-3 col-12 mb-0 mb-md-2">
+                            <p class="m-0">Rubro:</p>
+                        </div>
+                        <div class="col-md-9 col-12 mb-2">
                             <select class="form-select" id="rubroId" name="rubroId">
                                 <option value="-1" selected>TODOS</option>
                             </select>
                         </div>
-
                         <div class="col-5 mb-2">
                             <p>Porcetaje de descuento: </p>
                         </div>

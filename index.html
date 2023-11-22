@@ -16,27 +16,32 @@
         #map {
             margin-top: 10vh;
         }
+
         @media (max-width: 576px) {
             .filtro {
                 height: 65vh;
                 width: 100vw !important;
             }
+
             #map {
-            margin-top: 8vh;
+                margin-top: 8vh;
             }
         }
-        .col-4> img{
+
+        .col-4>img {
             border-radius: 25px 25px 0 0;
         }
-        .card{
+
+        .card {
             border-radius: 25px;
         }
-        .card:hover{
+
+        .card:hover {
             transform: scale(1.02);
         }
-
     </style>
 </head>
+
 <body class="bg-light">
     <header data-bs-theme="dark">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
@@ -50,14 +55,17 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item" >
-                            <a class="nav-link text-light"  href="https://www.coopeplus.com.ar/Usuarios/Beneficios">Beneficios</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                href="https://www.coopeplus.com.ar/Usuarios/Beneficios">Beneficios</a>
                         </li>
-                        <li class="nav-item" >
-                            <a class="nav-link text-light"  href="https://www.coopeplus.com.ar/Home/Cats">Centros de atención</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="https://www.coopeplus.com.ar/Home/Cats">Centros de
+                                atención</a>
                         </li>
-                        <li class="nav-item" >
-                            <a class="nav-link text-light"  href="https://www.coopeplus.com.ar/Usuarios/Faq">Preguntas frecuentes</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="https://www.coopeplus.com.ar/Usuarios/Faq">Preguntas
+                                frecuentes</a>
                         </li>
                     </ul>
                 </div>
@@ -92,7 +100,8 @@
                 aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasRightLabel">Filtros</h5>
-                    <button type="button" id="btn-close" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button type="button" id="btn-close" class="btn-close" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div class="row mw-100">
@@ -110,7 +119,7 @@
                         <div class="col-md-9 col-12 mb-2">
                             <select class="form-select" id="localidadId" name="localidadId">
                                 <option value="-1" disabled selected>Seleccione una localidad</option>
-                               
+
                             </select>
                         </div>
                         <div class="col-md-3 col-12 mb-0 mb-md-2">
@@ -126,7 +135,7 @@
                         </div>
                         <div class="col-6 mb-2">
                             <div class="row gx-5" id="checkContainer">
-                                
+
                             </div>
                         </div>
                         <div class="col-12 mb-2">
@@ -140,9 +149,10 @@
                                 </div>
                             </div>
                         </div>
-                       <div class="d-flex justify-content-center">
-                           <button class="btn btn-outline-primary mx-2 col-5" onclick="LimpiarFiltro()">Limpiar</button>
-                           <button class="btn btn-primary mx-2 col-5" onclick="CargarComercios()">Aplicar</button>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-outline-primary mx-2 col-5"
+                                onclick="LimpiarFiltro()">Limpiar</button>
+                            <button class="btn btn-primary mx-2 col-5" onclick="CargarComercios()">Aplicar</button>
                         </div>
                     </div>
                 </div>
@@ -155,8 +165,7 @@
         </section>
 
         <!-- Img cooperativa -->
-        <div id="imgCoope" >
-           <!-- <img src="img/slider-coopeplus1.svg" class="img-fluid w-100"> -->
+        <div id="imgCoope">
         </div>
 
         <footer>
@@ -204,19 +213,19 @@
                         <div>
                             <a href="http://www.bcra.gob.ar/BCRAyvos/usuarios_financieros.asp" target="_blank"
                                 rel="noopener noreferrer">
-                                <img src="/img/usuariosfinanciers.png" class="img-fluid"
-                                    alt="Usuarios Financieros">
+                                <img src="./img/usuariosfinanciers.png" class="img-fluid" alt="Usuarios Financieros">
                             </a>
                         </div>
                         <div class="text-md-center">
                             <a href="http://qr.afip.gob.ar/?qr=Lo5ruwccz5mMxrokHtaRVw,," target="_F960AFIPInfo"
                                 rel="noopener noreferrer">
-                                <img src="/img/data-fiscal.jpg" class="img-fluid " alt="data fiscal AFIP"
+                                <img src="./img/data-fiscal.jpg" class="img-fluid " alt="data fiscal AFIP"
                                     style="height:135px">
                             </a>
                         </div>
                         <div class="text-md-center text-dark font-weight-lighter fontPie">
-                            <a href="https://www.coopeplus.com.ar/Home/DatosPersonales" class="text-decoration-none text-dark">Datos personales</a>
+                            <a href="https://www.coopeplus.com.ar/Home/DatosPersonales"
+                                class="text-decoration-none text-dark">Datos personales</a>
                         </div>
                     </div>
                     <div class="col col-md-6 col-auto my-2 paddingLeftPie order-2">
@@ -225,11 +234,13 @@
                             <li class="row mb-2">
                                 <i class="bi bi-geo-alt-fill text-muted col-1" style="font-size: 25px;"></i>
                                 <div class="col-11">
-                                    <p class="text-dark font-weight-lighter d-inline ml-3">Casa Central 19 de Mayo 271 Tel.
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Casa Central 19 de Mayo 271
+                                        Tel.
                                         <a href="tel:+5492914550396"
                                             class="text-decoration-none text-dark marginPie">0291-4550396</a>
                                     </p><br>
-                                    <p class="text-dark font-weight-lighter d-inline ml-3">Bahía Blanca de Lunes a Viernes
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Bahía Blanca de Lunes a
+                                        Viernes
                                         de 8 a 17 hs.</p>
                                 </div>
                             </li>
@@ -237,29 +248,34 @@
                                 <i class="bi bi-envelope-fill text-muted col-1" style="font-size: 25px;"></i>
                                 <div class="col-11">
                                     <p class="text-dark font-weight-lighter d-inline ml-3"><a
-                                        href="mailto:comercial@nuevacard.com.ar"
-                                        class="text-decoration-none text-dark">comercial@nuevacard.com.ar</a></p><br>
-                                <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17 Hs.</p>
+                                            href="mailto:comercial@nuevacard.com.ar"
+                                            class="text-decoration-none text-dark">comercial@nuevacard.com.ar</a></p>
+                                    <br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17 Hs.
+                                    </p>
                                 </div>
                             </li>
                             <li class="row mb-2">
                                 <i class="bi bi-whatsapp text-muted col-1" style="font-size: 25px;"></i>
                                 <div class="col-11">
                                     <p class="text-dark font-weight-lighter d-inline ml-3"><a
-                                        href="https://api.whatsapp.com/send?phone=5492914250963&amp;text=&amp;source=&amp;data=&amp;app_absent="
-                                        target="_blank" class="text-decoration-none text-dark"
-                                        rel="noopener noreferrer">0291-4250963</a></p><br>
-                                    <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17 Hs.</p>
+                                            href="https://api.whatsapp.com/send?phone=5492914250963&amp;text=&amp;source=&amp;data=&amp;app_absent="
+                                            target="_blank" class="text-decoration-none text-dark"
+                                            rel="noopener noreferrer">0291-4250963</a></p><br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17 Hs.
+                                    </p>
                                 </div>
                             </li>
                             <li class="row mb-2">
                                 <i class="bi bi-phone text-muted col-1" style="font-size: 25px;"></i>
-                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a href="tel:+54908103334343"
+                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a
+                                        href="tel:+54908103334343"
                                         class="text-decoration-none text-dark">0810-333-4343</a></p>
                             </li>
                             <li class="row mb-2">
                                 <i class="bi bi-phone text-muted col-1" style="font-size: 25px;"></i>
-                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a href="tel:+54908009997447"
+                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a
+                                        href="tel:+54908009997447"
                                         class="text-decoration-none text-dark">0800-999-7447</a> Todos los días de 9 a
                                     21 Hs. </p>
                             </li>
@@ -269,8 +285,9 @@
                         <h4 class="text-muted">QUIÉNES SOMOS</h4>
                         <ul class="list-unstyled mt-2 fontPie">
                             <li class="mb-2">
-                                <p class="text-dark font-weight-lighter d-inline ml-0"><a href="https://www.coopeplus.com.ar/Home/QuienesSomos"
-                                class="text-decoration-none text-dark">Nuestra tarjeta</a></p>
+                                <p class="text-dark font-weight-lighter d-inline ml-0"><a
+                                        href="https://www.coopeplus.com.ar/Home/QuienesSomos"
+                                        class="text-decoration-none text-dark">Nuestra tarjeta</a></p>
                             </li>
 
                         </ul>
@@ -291,8 +308,5 @@
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script2.js"></script>
-    <!-- <script src="copia.js"></script> -->
-
 </body>
-
 </html>

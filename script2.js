@@ -9,9 +9,8 @@ let dto15 = document.getElementById("15%");
 let dto20 = document.getElementById("20%");
 let btnClose = document.getElementById("btn-close");
 let img_coop = document.getElementById("imgCoope");
-//Ocultar o mostrar el mapa cuando se le hace click al CheckBox
-mapaVisible.addEventListener("change", function () {
 
+mapaVisible.addEventListener("change", function () {
     if (!mapaVisible.checked) {
         mapa.style.display = "none";
         filtro.style.paddingTop = "10vh";
@@ -30,19 +29,20 @@ maxZoom: 18,
         attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
     }).addTo(map);
 
-// Obtener el control de atribución actual
+// Obtener el control de atribución actual (esquina inferior derecha)
 var attributionControl = map.attributionControl;
     attributionControl.setPrefix('Leaflet'),
     attributionControl.addTo(map);
 
 //#endregion
-// Objeto para hacer un seguimiento de las localidades procesadas
+
+// Objeto para hacer un seguimiento de las provincias, localidades, rubros e imagenes procesadas
 var provinciasProcesadas = {};
 var localidadesProcesadas = {};
 var rubrosProcesados = {};
 var imgprocesada = {};
 
-var comerciosFiltrados = [];  // Arreglo para almacenar los comercios filtrados
+var comerciosFiltrados = [];  
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
@@ -82,19 +82,13 @@ fetch('./dir.csv')
                 Provincia: row.Provincia
             };
         });
-
         // Recorre el CSV y crea marcadores
         comercios.forEach(function (comercio) {
-            //Carga el filtro por primera vez
             // Almacena el comercio filtrado
             comerciosFiltrados.push(comercio);
-
         });
-        
         CargarProvincias();
-        //CargarLocalidades();
         CargarComercios();
-        //ValidarDatos()
     })
     .catch(function (error) {
         console.error("Error al cargar el CSV:", error);
@@ -104,7 +98,6 @@ fetch('./dir.csv')
 function CargarProvincias() {
     // Limpia opciones antiguas
     prov.innerHTML = '<option value="-1" disabled>Seleccione una provincia</option>';
-
     // Cargar nuevas opciones de provincias
     var provincias = [];
 
@@ -113,13 +106,12 @@ function CargarProvincias() {
             provincias.push(comercio.Provincia);
             provinciasProcesadas[comercio.Provincia] = true;
 
-            // Establecer el atributo selected si la provincia es "Provincia de Buenos Aires"
+            // Establecer por defecto la provincia "Provincia de Buenos Aires"
             if (comercio.Provincia === "Provincia de Buenos Aires") {
-                selectedProvincia = "Provincia de Buenos Aires"; // Actualizar la variable selectedProvincia
+                selectedProvincia = "Provincia de Buenos Aires"; 
             }
         }
     });
-
     // Ordenar provincias alfabéticamente
     provincias.sort();
 
@@ -134,8 +126,6 @@ function CargarProvincias() {
             selectedProvincia = provinciaNombre; // Actualizar la variable selectedProvincia
         }
     });
-
-    // Después de cargar las provincias, puedes llamar a CargarLocalidades y CargarRubros si es necesario
     CargarLocalidades();
 }
 
@@ -155,11 +145,10 @@ function CargarLocalidades() {
             localidades.push(comercio.Localidad);
             localidadesProcesadas[comercio.Localidad] = true;
 
+            // Establecer por defecto la localidad es "BAHÍA BLANCA"
             if (comercio.Localidad === "BAHÍA BLANCA") {
-                //optionLoc.selected = true;
                 selectedLocalidad = "BAHÍA BLANCA"; 
             }
-           
         }
     });
     
@@ -216,7 +205,7 @@ function CargarRubros() {
 
 function SetMarker(comercio) {
     var marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
-    //iconos 10% y 15%
+    //icono del marcador
     var customIcon = L.icon({
         iconUrl: 'img/' + comercio.Dto + '.jpg',
         iconSize: [40, 32],
@@ -225,7 +214,7 @@ function SetMarker(comercio) {
     });
 
     marker.setIcon(customIcon);
-    // Contenido personalizado del marcador con valores del comercio
+    // Contenido del marcador 
     var contenido =
         '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
         '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
@@ -233,7 +222,6 @@ function SetMarker(comercio) {
         '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
         '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
     // Asignar el contenido al marcador
-    // marker.bindPopup(contenido).openPopup();
     marker.bindPopup(contenido);
 }
 
@@ -333,8 +321,9 @@ function CrearCheckDto(comercio) {
     let checkboxes = Array.from(checkContainer.querySelectorAll('.dto'));
 
     // Verificar si ya existe un checkbox con el mismo valor
+    // No crear otro checkbox si ya existe uno con el mismo valor
     if (document.getElementById(comercio.Dto + "%")) {
-        return; // No crear otro checkbox si ya existe uno con el mismo valor
+        return; 
     }
 
     // Crear un elemento div con la clase "col-4"
@@ -388,19 +377,15 @@ function CrearCheckDto(comercio) {
 }
 
 function LimpiarFiltro() {
-    // Restablecer provincia por defecto
     selectedProvincia = "Provincia de Buenos Aires";
-    // Restablecer localidad por defecto
     selectedLocalidad = "BAHÍA BLANCA";
-    // Restablecer rubros por defecto
     selectedRubro = "TODOS";
 
-    // Actualizar los elementos del DOM según las opciones predeterminadas
     prov.value = selectedProvincia;
     localidad.value = selectedLocalidad;
     rubro.value = selectedRubro;
 
-    // Llamar a las funciones para cargar las opciones de localidades y rubros con los valores predeterminados
+    //Cargar las opciones de localidades y rubros con los valores predeterminados
     CargarLocalidades();
     CargarRubros();
 
@@ -435,6 +420,7 @@ function LimpiarFiltro() {
 }
 
 function CargarComercios() {
+    //Controla que se seleccione una localidad
     if (selectedLocalidad === "Seleccione una localidad") {
         alert("Seleccione una localidad");
         return;
@@ -456,14 +442,12 @@ function CargarComercios() {
         const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
             return checkbox.checked && comercio.Dto === checkbox.value;
         });
-        
+        //Si Cumple con los criterios
         if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
-           
-            // Cumple con los criterios
             SetMarker(comercio);
             CrearCards(comercio);
-
             CargarImgCooperativa(comercio);
+
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
                 map.setView([comercio.Latitud, comercio.Longitud], 14);
             }
@@ -472,9 +456,6 @@ function CargarComercios() {
 
     // Cerrar menú filtros
     btnClose.click();
-    console.log('prov: ' + selectedProvincia);
-    console.log('Loc: ' + selectedLocalidad);
-    console.log('Rubro: ' + selectedRubro);
 }
 
 function LimpiarComercios() {

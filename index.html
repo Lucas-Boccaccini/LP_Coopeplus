@@ -23,12 +23,19 @@
             }
             #map {
             margin-top: 8vh;
+            }
         }
+        .col-4> img{
+            border-radius: 25px 25px 0 0;
         }
-
+        .card{
+            border-radius: 25px;
+        }
+        .card:hover{
+            transform: scale(1.02);
+        }
 
     </style>
-
 </head>
 <body class="bg-light">
     <header data-bs-theme="dark">
@@ -43,14 +50,14 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <li class="nav-item" >
+                            <a class="nav-link text-light"  href="https://www.coopeplus.com.ar/Usuarios/Beneficios">Beneficios</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                        <li class="nav-item" >
+                            <a class="nav-link text-light"  href="https://www.coopeplus.com.ar/Home/Cats">Centros de atención</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <li class="nav-item" >
+                            <a class="nav-link text-light"  href="https://www.coopeplus.com.ar/Usuarios/Faq">Preguntas frecuentes</a>
                         </li>
                     </ul>
                 </div>
@@ -103,6 +110,7 @@
                         <div class="col-md-9 col-12 mb-2">
                             <select class="form-select" id="localidadId" name="localidadId">
                                 <option value="-1" disabled selected>Seleccione una localidad</option>
+                               
                             </select>
                         </div>
                         <div class="col-md-3 col-12 mb-0 mb-md-2">
@@ -141,11 +149,16 @@
             </div>
         </section>
 
-
         <!-- Cards -->
         <section class="container">
             <div class="row" id="cardContainer"></div>
         </section>
+
+        <!-- Img cooperativa -->
+        <div id="imgCoope" >
+           <!-- <img src="img/slider-coopeplus1.svg" class="img-fluid w-100"> -->
+        </div>
+
         <footer>
             <section id="sub-bar" class="container-fluid d-flex justify-content-center"
                 style="background-color: #dc3545!important;">
@@ -277,7 +290,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script2.js"></script>
     <!-- <script src="copia.js"></script> -->
 
 </body>

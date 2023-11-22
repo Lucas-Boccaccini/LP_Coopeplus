@@ -8,8 +8,7 @@ let dto10 = document.getElementById("10%");
 let dto15 = document.getElementById("15%");
 let dto20 = document.getElementById("20%");
 let btnClose = document.getElementById("btn-close");
-var buscar = document.getElementById("buscar");
-
+let img_coop = document.getElementById("imgCoope");
 //Ocultar o mostrar el mapa cuando se le hace click al CheckBox
 mapaVisible.addEventListener("change", function () {
 
@@ -33,7 +32,7 @@ maxZoom: 18,
 
 // Obtener el control de atribución actual
 var attributionControl = map.attributionControl;
-attributionControl.setPrefix('Leaflet'),
+    attributionControl.setPrefix('Leaflet'),
     attributionControl.addTo(map);
 
 //#endregion
@@ -41,11 +40,12 @@ attributionControl.setPrefix('Leaflet'),
 var provinciasProcesadas = {};
 var localidadesProcesadas = {};
 var rubrosProcesados = {};
+var imgprocesada = {};
+
 var comerciosFiltrados = [];  // Arreglo para almacenar los comercios filtrados
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
-
 prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
     CargarLocalidades();
@@ -76,6 +76,7 @@ fetch('./dir.csv')
                 Prefijo: row.Prefijo,
                 NroTel: row.NroTel,
                 Dto: row.Dto,
+                Img: row.Img,
                 Latitud: row.Latitud,
                 Longitud: row.Longitud,
                 Provincia: row.Provincia
@@ -84,55 +85,67 @@ fetch('./dir.csv')
 
         // Recorre el CSV y crea marcadores
         comercios.forEach(function (comercio) {
+            //Carga el filtro por primera vez
             // Almacena el comercio filtrado
             comerciosFiltrados.push(comercio);
-        });
 
+        });
+        
         CargarProvincias();
-        CargarLocalidades();
-        CargarRubros();
+        //CargarLocalidades();
         CargarComercios();
+        //ValidarDatos()
     })
     .catch(function (error) {
         console.error("Error al cargar el CSV:", error);
     });
 //#endregion
 
-function CargarSelectOrdenado(elemento, opciones) {
-    // Limpia opciones antiguas
-    //elemento.innerHTML = '<option value="-1" disabled>Seleccione una opción</option>';
-    // Ordenar las opciones alfabéticamente
-    opciones.sort();
-
-    // Agregar las opciones ordenadas al elemento select
-    opciones.forEach(function (opcion) {
-        var option = document.createElement("option");
-        option.text = opcion;
-        elemento.add(option);
-    });
-}
-
 function CargarProvincias() {
+    // Limpia opciones antiguas
+    prov.innerHTML = '<option value="-1" disabled>Seleccione una provincia</option>';
+
+    // Cargar nuevas opciones de provincias
     var provincias = [];
-    rubro.innerHTML = '<option value="-1" disabled selected>Seleccione una provincia</option>';
 
     comerciosFiltrados.forEach(function (comercio) {
         if (!provinciasProcesadas[comercio.Provincia]) {
             provincias.push(comercio.Provincia);
             provinciasProcesadas[comercio.Provincia] = true;
 
+            // Establecer el atributo selected si la provincia es "Provincia de Buenos Aires"
             if (comercio.Provincia === "Provincia de Buenos Aires") {
-                selectedProvincia = "Provincia de Buenos Aires";
+                selectedProvincia = "Provincia de Buenos Aires"; // Actualizar la variable selectedProvincia
             }
         }
     });
 
-    CargarSelectOrdenado(prov, provincias);
+    // Ordenar provincias alfabéticamente
+    provincias.sort();
+
+    // Agregar las opciones ordenadas al elemento <select>
+    provincias.forEach(function (provinciaNombre) {
+        var optionProv = document.createElement("option");
+        optionProv.text = provinciaNombre;
+        prov.add(optionProv);
+
+        if (provinciaNombre === selectedProvincia) {
+            optionProv.selected = true;
+            selectedProvincia = provinciaNombre; // Actualizar la variable selectedProvincia
+        }
+    });
+
+    // Después de cargar las provincias, puedes llamar a CargarLocalidades y CargarRubros si es necesario
+    CargarLocalidades();
 }
 
 function CargarLocalidades() {
+    // Limpia opciones antiguas
+    localidadesProcesadas = {};
+    localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
+    selectedLocalidad = "Seleccione una localidad";
+    // Cargar nuevas opciones de localidades
     var localidades = [];
-    rubro.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
 
     comerciosFiltrados.forEach(function (comercio) {
         if (
@@ -143,17 +156,40 @@ function CargarLocalidades() {
             localidadesProcesadas[comercio.Localidad] = true;
 
             if (comercio.Localidad === "BAHÍA BLANCA") {
-                selectedLocalidad = "BAHÍA BLANCA";
+                //optionLoc.selected = true;
+                selectedLocalidad = "BAHÍA BLANCA"; 
             }
+           
+        }
+    });
+    
+    // Ordenar localidades alfabéticamente
+    localidades.sort();
+
+    // Agregar las opciones ordenadas al elemento <select>
+    localidades.forEach(function (localidadNombre) {
+        var optionLoc = document.createElement("option");
+        optionLoc.text = localidadNombre;
+        localidad.add(optionLoc);
+
+        if (localidadNombre === selectedLocalidad) {
+            optionLoc.selected = true;
+            selectedLocalidad = localidadNombre; 
+           
         }
     });
 
-    CargarSelectOrdenado(localidad, localidades);
+    CargarRubros();
 }
 
 function CargarRubros() {
-    var rubros = [];
+    // Limpia opciones antiguas
     rubro.innerHTML = '<option value="-1" selected>TODOS</option>';
+    rubrosProcesados = {};
+
+    // Cargar nuevas opciones de rubros
+    var rubros = [];
+
     comerciosFiltrados.forEach(function (comercio) {
         if (
             (comercio.Provincia === selectedProvincia) &&
@@ -162,10 +198,20 @@ function CargarRubros() {
         ) {
             rubros.push(comercio.Rubro);
             rubrosProcesados[comercio.Rubro] = true;
+            if (rubro.options[rubro.selectedIndex].text === "TODOS") {
+                selectedRubro = "TODOS"; // Actualizar la variable selectedrubro
+            }
         }
     });
 
-    CargarSelectOrdenado(rubro, rubros);
+    rubros.sort();
+
+    // Agregar las opciones ordenadas al elemento <select>
+    rubros.forEach(function (rubroNombre) {
+        var optionRubro = document.createElement("option");
+        optionRubro.text = rubroNombre;
+        rubro.add(optionRubro);
+    });
 }
 
 function SetMarker(comercio) {
@@ -342,22 +388,43 @@ function CrearCheckDto(comercio) {
 }
 
 function LimpiarFiltro() {
+    // Restablecer provincia por defecto
+    selectedProvincia = "Provincia de Buenos Aires";
+    // Restablecer localidad por defecto
+    selectedLocalidad = "BAHÍA BLANCA";
+    // Restablecer rubros por defecto
+    selectedRubro = "TODOS";
 
-    /* Agregar que cuando limpie el filtro vuelva hacer foco en bahia blanca */
-   
-    CargarProvincias();
+    // Actualizar los elementos del DOM según las opciones predeterminadas
+    prov.value = selectedProvincia;
+    localidad.value = selectedLocalidad;
+    rubro.value = selectedRubro;
+
+    // Llamar a las funciones para cargar las opciones de localidades y rubros con los valores predeterminados
     CargarLocalidades();
     CargarRubros();
+
+    // Establecer el atributo selected en las opciones predeterminadas
+    var provinciaOption = document.querySelector(`#provincia option[value="${selectedProvincia}"]`);
+    var localidadOption = document.querySelector(`#localidad option[value="${selectedLocalidad}"]`);
+    var rubroOption = document.querySelector(`#rubro option[value="${selectedRubro}"]`);
+
+    if (provinciaOption) {
+        provinciaOption.selected = true;
+    }
+
+    if (localidadOption) {
+        localidadOption.selected = true;
+    }
+
+    if (rubroOption) {
+        rubroOption.selected = true;
+    }
+
     mapaVisible.checked = true;
 
     var mapaVisibleChange = new Event('change');
-    prov.dispatchEvent(mapaVisibleChange);
-
-    var provChange = new Event('change');
-    localidad.dispatchEvent(provChange);
-
-    var localidadChange = new Event('change');
-    rubro.dispatchEvent(localidadChange);
+    mapaVisible.dispatchEvent(mapaVisibleChange);
 
     check = document.querySelectorAll('.dto');
     check.forEach(dto => {
@@ -368,13 +435,19 @@ function LimpiarFiltro() {
 }
 
 function CargarComercios() {
-    //Limpia los comercios que estan por defecto o seleccionados previamente
+    if (selectedLocalidad === "Seleccione una localidad") {
+        alert("Seleccione una localidad");
+        return;
+    }
+    
+    // Limpia los comercios que están por defecto o seleccionados previamente
     LimpiarComercios();
-    //Crea los check con los descuentos correspondientes
+    // Crea los check con los descuentos cargados en el csv
     comerciosFiltrados.forEach(element => {
         CrearCheckDto(element);
     });
-    //Filtra los comercios en base a las opciones seleccionadas
+
+    // Filtra los comercios en base a las opciones seleccionadas
     comerciosFiltrados.forEach(function (comercio) {
         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
         const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
@@ -383,18 +456,25 @@ function CargarComercios() {
         const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
             return checkbox.checked && comercio.Dto === checkbox.value;
         });
-        const cumpleBuscar = buscar.value === "" || comercio.NomComercio.includes(buscar.value)
+        
         if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
+           
             // Cumple con los criterios
             SetMarker(comercio);
             CrearCards(comercio);
+
+            CargarImgCooperativa(comercio);
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
                 map.setView([comercio.Latitud, comercio.Longitud], 14);
             }
         }
     });
-    //Cerrar menu filtros
+
+    // Cerrar menú filtros
     btnClose.click();
+    console.log('prov: ' + selectedProvincia);
+    console.log('Loc: ' + selectedLocalidad);
+    console.log('Rubro: ' + selectedRubro);
 }
 
 function LimpiarComercios() {
@@ -412,3 +492,17 @@ function LimpiarComercios() {
     map.setView([-38.7183, -62.2661], 14);
 }
 
+function CargarImgCooperativa(comercio) {
+    // Eliminar la imagen anterior
+    var img_coop = document.getElementById("imgCoope");
+
+    if (comercio.Localidad == selectedLocalidad && !imgprocesada[comercio.Localidad]) {
+        img_coop.innerHTML = '';
+        let img = document.createElement("img");
+        img.src = "img/" + comercio.Img + ".svg";
+        img.classList.add("img-fluid", "w-100")
+        img_coop.appendChild(img);
+        // Marcar la localidad como procesada
+        imgprocesada[comercio.Localidad] = true;
+    }
+}

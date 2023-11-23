@@ -258,7 +258,7 @@ function CrearCards(comercio) {
     var img = document.createElement("img");
     // img.src = "./img/e36258b3c74f08054a974a5fe1703f9c.jpg";
     if(comercio.ImgComercio == ""){
-        img.src = "./img/"+ comercio.Rubro +".PNG";
+        img.src = "./img/"+ comercio.Rubro +".png";
     }else{
         img.src = "./img/"+ comercio.ImgComercio +".jpg";
     }

@@ -16,7 +16,20 @@
         #map {
             margin-top: 10vh;
         }
-
+        .col-4>img {
+            border-radius: 25px 25px 0 0;
+        }
+        
+        .card {
+            border-radius: 25px;
+        }
+        
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .nav-link:hover{
+            color: #c0d3f0 !important
+        }
         @media (max-width: 576px) {
             .filtro {
                 height: 65vh;
@@ -26,18 +39,6 @@
             #map {
                 margin-top: 8vh;
             }
-        }
-
-        .col-4>img {
-            border-radius: 25px 25px 0 0;
-        }
-
-        .card {
-            border-radius: 25px;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
         }
     </style>
 </head>
@@ -56,15 +57,15 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link text-light"
+                            <a class="nav-link text-white"
                                 href="https://www.coopeplus.com.ar/Usuarios/Beneficios">Beneficios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="https://www.coopeplus.com.ar/Home/Cats">Centros de
+                            <a class="nav-link text-white" href="https://www.coopeplus.com.ar/Home/Cats">Centros de
                                 atención</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="https://www.coopeplus.com.ar/Usuarios/Faq">Preguntas
+                            <a class="nav-link text-white" href="https://www.coopeplus.com.ar/Usuarios/Faq">Preguntas
                                 frecuentes</a>
                         </li>
                     </ul>
@@ -165,8 +166,8 @@
         </section>
 
         <!-- Img cooperativa -->
-        <div id="imgCoope">
-        </div>
+        <a id="imgCoope">
+        </a>
 
         <footer>
             <section id="sub-bar" class="container-fluid d-flex justify-content-center"
@@ -307,6 +308,6 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="script2.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

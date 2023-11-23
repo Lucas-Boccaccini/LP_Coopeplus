@@ -4,9 +4,6 @@ let rubro = document.getElementById("rubroId");
 let mapaVisible = document.getElementById("mapaVisible");
 let filtro = document.getElementById("filtro");
 let mapa = document.getElementById("map");
-let dto10 = document.getElementById("10%");
-let dto15 = document.getElementById("15%");
-let dto20 = document.getElementById("20%");
 let btnClose = document.getElementById("btn-close");
 let img_coop = document.getElementById("imgCoope");
 
@@ -37,11 +34,11 @@ attributionControl.setPrefix('Leaflet'),
 //#endregion
 
 // Objeto para hacer un seguimiento de las provincias, localidades, rubros e imagenes procesadas
+var PrimeraCarga = false;
 var provinciasProcesadas = {};
 var localidadesProcesadas = {};
 var rubrosProcesados = {};
 var imgprocesada = {};
-var descuentosAgregados = {};
 
 var comerciosFiltrados = [];
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
@@ -54,6 +51,7 @@ prov.addEventListener("change", function () {
 localidad.addEventListener("change", function () {
     selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
     CargarRubros();
+    CrearCheckDto();
 });
 rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
@@ -79,6 +77,7 @@ fetch('./dir.csv')
                 Dto: row.Dto,
                 ImgCoop: row.ImgCoop,
                 ImgCoopLink: row.ImgCoopLink,
+                ImgComercio: row.ImgComercio,
                 Latitud: row.Latitud,
                 Longitud: row.Longitud,
                 Provincia: row.Provincia
@@ -91,6 +90,7 @@ fetch('./dir.csv')
         });
         CargarProvincias();
         CargarComercios();
+        PrimeraCarga = true;
     })
     .catch(function (error) {
         console.error("Error al cargar el CSV:", error);
@@ -136,7 +136,7 @@ function CargarLocalidades() {
     localidadesProcesadas = {};
     localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
     selectedLocalidad = "Seleccione una localidad";
-    // Cargar nuevas opciones de localidades
+    // Cargar nuevas localidades
     var localidades = [];
 
     comerciosFiltrados.forEach(function (comercio) {
@@ -148,7 +148,7 @@ function CargarLocalidades() {
             localidadesProcesadas[comercio.Localidad] = true;
 
             // Establecer por defecto la localidad es "BAHÍA BLANCA"
-            if (comercio.Localidad === "BAHÍA BLANCA") {
+            if (comercio.Localidad === "BAHÍA BLANCA" && !PrimeraCarga) {
                 selectedLocalidad = "BAHÍA BLANCA";
             }
         }
@@ -169,8 +169,8 @@ function CargarLocalidades() {
 
         }
     });
-    CrearCheckDto();
     CargarRubros();
+    CrearCheckDto();
 }
 
 function CargarRubros() {
@@ -256,7 +256,12 @@ function CrearCards(comercio) {
     imgCol.classList.add("col-4", "col-md-12");
 
     var img = document.createElement("img");
-    img.src = "./img/e36258b3c74f08054a974a5fe1703f9c.jpg";
+    // img.src = "./img/e36258b3c74f08054a974a5fe1703f9c.jpg";
+    if(comercio.ImgComercio == ""){
+        img.src = "./img/"+ comercio.Rubro +".PNG";
+    }else{
+        img.src = "./img/"+ comercio.ImgComercio +".jpg";
+    }
     img.classList.add("img-fluid");
     img.style.height = "200px";
     img.style.width = "300px";
@@ -318,80 +323,27 @@ function CrearCards(comercio) {
     cardContainer.appendChild(cardCol);
 }
 
-// function CrearCheckDto(comercio) {
-//     let checkContainer = document.getElementById("checkContainer");
-//     let checkboxes = Array.from(checkContainer.querySelectorAll('.dto'));
-
-//     // Verificar si ya existe un checkbox con el mismo valor
-//     // No crear otro checkbox si ya existe uno con el mismo valor
-//     if (document.getElementById(comercio.Dto + "%")){
-//         return; 
-//     }
-
-//     // Crear un elemento div con la clase "col-4"
-//     var divCol = document.createElement("div");
-//     divCol.className = "col-4";
-
-//     // Crear un elemento div con la clase "form-check"
-//     var divFormCheck = document.createElement("div");
-//     divFormCheck.className = "form-check";
-
-//     // Crear un elemento input de tipo checkbox con la clase "form-check-input"
-//     var checkbox = document.createElement("input");
-//     checkbox.type = "checkbox";
-//     checkbox.classList.add("form-check-input", "dto");
-
-//     checkbox.value = comercio.Dto;
-//     checkbox.id = comercio.Dto + "%";
-//     checkbox.checked = true;
-
-//     // Crear un elemento label con la clase "form-check-label"
-//     var label = document.createElement("label");
-//     label.className = "form-check-label";
-//     label.htmlFor = comercio.Dto + "%";
-//     label.textContent = comercio.Dto + "%";
-
-//     // Agregar el input y el label al div con la clase "form-check"
-//     divFormCheck.appendChild(checkbox);
-//     divFormCheck.appendChild(label);
-
-//     // Agregar el div con la clase "form-check" al div con la clase "col-4"
-//     divCol.appendChild(divFormCheck);
-
-//     // Agregar el nuevo checkbox al array
-//     checkboxes.push(checkbox);
-
-//     // Ordenar el array según el valor del descuento
-//     checkboxes.sort(function (a, b) {
-//         return parseInt(a.value) - parseInt(b.value);
-//     });
-
-//     // Limpiar el contenedor
-//     checkContainer.innerHTML = '';
-
-//     // Agregar los checkboxes ordenados al contenedor
-//     checkboxes.forEach(function (chk) {
-//         var parentCol = chk.closest('.col-4');
-//         if (parentCol) {
-//             checkContainer.appendChild(parentCol);
-//         }
-//     });
-// }
-
 function CrearCheckDto() {
-    // Filtrar los descuentos disponibles para la localidad seleccionada
-    const descuentosDisponibles = comerciosFiltrados
-        .filter(comercio => comercio.Localidad === selectedLocalidad)
-        .map(comercio => comercio.Dto);
-
     // Limpiar el contenedor de checkboxes
     checkContainer.innerHTML = '';
 
     // Variable para hacer un seguimiento de los descuentos ya agregados
-    descuentosAgregados = {};
+    let descuentosAgregados = {};
+    let checkboxes = [];
 
+    // Filtrar descuentos por la localidad seleccionada
+    comerciosFiltrados.forEach(function (comercio) {
+        if (comercio.Localidad === selectedLocalidad) {
+            checkboxes.push(comercio.Dto);
+        }
+    });
+
+    // Ordenar los descuentos ascendentemente
+    checkboxes.sort(function (a, b) {
+        return a - b;
+    });
     // Crear un checkbox por cada descuento disponible
-    descuentosDisponibles.forEach(descuento => {
+    checkboxes.forEach(descuento => {
         // Verificar si el descuento ya ha sido agregado
         if (!descuentosAgregados[descuento]) {
             let checkbox = document.createElement("input");
@@ -475,8 +427,6 @@ function CargarComercios() {
 
     // Limpia los comercios que están por defecto o seleccionados previamente
     LimpiarComercios();
-    // Crea los check con los descuentos cargados en el csv
-    //CrearCheckDto();
 
     // Filtra los comercios en base a las opciones seleccionadas
     comerciosFiltrados.forEach(function (comercio) {

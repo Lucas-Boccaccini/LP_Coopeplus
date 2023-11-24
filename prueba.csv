@@ -1,16 +1,15 @@
-Localidad,Rubro,NomComercio,Direccion,Prefijo,NroTel,Dto,Provincia,ImgCoop,ImgCoopLink,Latitud,Longitud
-BAHÍA BLANCA,DEPORTE,AGUAMARINA SPORT,BELGRANO 207,291,4500859,15,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,-38.71770120000001,-62.2612873
-BAHÍA BLANCA,DEPORTE,BAHÍA DEPORTES,AV. ARIAS 2009,,,15,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,-38.7532456,-62.2661058
-BAHÍA BLANCA,DEPORTE,BIENESTAR SPORT,O´HIGGINS 201,291,4548621,10,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,-38.72165,-62.26840000000001
-BAHÍA BLANCA,INDUMENTARIA,CARDÓN,SOLER 45,291,4510471,10,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,-38.7164592,-62.26337280000001
-BAHÍA BLANCA,CALZADOS,CARDÓN,SOLER 45,291,4510471,10,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,-38.7164592,-62.26337280000001
-ALLEN,INDUMENTARIA,BEAUTIFUL SIN LÍMITES,SAN MARTÍN 412,298,154403002,15,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,-38.9792952,-67.8237307
-ALLEN,INDUMENTARIA,BRUNO SPORT´S,AV. ROCA 6,298,4450068,15,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,-38.9769908,-67.82955869999999
-ALLEN,INDUMENTARIA,DAN-SIL,TOMÁS ORELL 252,298,4450021,10,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,-38.9778831,-67.8260451
-ALLEN,INDUMENTARIA,FASHION LOVER,TOMÁS ORELL 269,298,154643858,10,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,-38.9782292,-67.8258266
-AZUL,INDUMENTARIA,CASA TOSCANO,H. YRIGOYEN 592,2281,426535,15,Provincia de Buenos Aires,slider-coopeplus3,-36.7791865,-59.8603472
-AZUL,INDUMENTARIA,CATALDO HOMBRES,H. YRIGOYEN 516,2281,435483,15,Provincia de Buenos Aires,slider-coopeplus3,-36.7782144,-59.8615946
-AZUL,INDUMENTARIA,CHE BERLÍN,SAN MARTÍN 590,2281,633996,15,Provincia de Buenos Aires,slider-coopeplus3,-36.7799854,-59.86109030000001
-AZUL,INDUMENTARIA,DANIEL BASIC,SAN MARTÍN 512,2281,428033,15,Provincia de Buenos Aires,slider-coopeplus3,-36.7788354,-59.86243169999999
-AZUL,INDUMENTARIA,EL GALPÓN,SAN MARTÍN 596,2281,585385,15,Provincia de Buenos Aires,slider-coopeplus3,-36.7798539,-59.8609759
-AZUL,INDUMENTARIA,HAMACA,AMADO DÍA 379,2281,479534,20,Provincia de Buenos Aires,slider-coopeplus3,-36.7785244,-59.8495547
+Localidad,Rubro,NomComercio,Direccion,Prefijo,NroTel,Dto,Provincia,ImgCoop,ImgCoopLink,ImgComercio,Latitud,Longitud
+BAHÍA BLANCA,DEPORTE,AGUAMARINA SPORT,BELGRANO 207,291,4500859,15,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,CooperativaObrera,-38.7177012,-62.2612873
+BAHÍA BLANCA,DEPORTE,BAHÍA DEPORTES,AV. ARIAS 2009,,,15,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,CooperativaObrera,-38.7532456,-62.2661058
+BAHÍA BLANCA,DEPORTE,BIENESTAR SPORT,O´HIGGINS 201,291,4548621,10,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,,-38.72165,-62.2684
+BAHÍA BLANCA,INDUMENTARIA,CARDÓN,SOLER 45,291,4510471,10,Provincia de Buenos Aires,slider-coopeplus1,https://www.coopeplus.com.ar/,,-38.7164592,-62.2633728
+ALLEN,INDUMENTARIA,BEAUTIFUL SIN LÍMITES,SAN MARTÍN 412,298,154403002,15,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,CooperativaObrera,-38.9792952,-67.8237307
+ALLEN,INDUMENTARIA,BRUNO SPORT´S,AV. ROCA 6,298,4450068,15,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,CooperativaObrera,-38.9769908,-67.8295587
+ALLEN,INDUMENTARIA,DAN-SIL,TOMÁS ORELL 252,298,4450021,10,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,CooperativaObrera,-38.9778831,-67.8260451
+ALLEN,INDUMENTARIA,FASHION LOVER,TOMÁS ORELL 269,298,154643858,10,Río Negro,slider-coopeplus2, https://www.tarjetabbps.com.ar/,CooperativaObrera,-38.9782292,-67.8258266
+AZUL,INDUMENTARIA,CASA TOSCANO,H. YRIGOYEN 592,2281,426535,15,Provincia de Buenos Aires,slider-coopeplus3,,CooperativaObrera,-36.7791865,-59.8603472
+AZUL,INDUMENTARIA,CATALDO HOMBRES,H. YRIGOYEN 516,2281,435483,15,Provincia de Buenos Aires,slider-coopeplus3,,CooperativaObrera,-36.7782144,-59.8615946
+AZUL,INDUMENTARIA,CHE BERLÍN,SAN MARTÍN 590,2281,633996,15,Provincia de Buenos Aires,slider-coopeplus3,,CooperativaObrera,-36.7799854,-59.8610903
+AZUL,INDUMENTARIA,DANIEL BASIC,SAN MARTÍN 512,2281,428033,15,Provincia de Buenos Aires,slider-coopeplus3,,CooperativaObrera,-36.7788354,-59.8624317
+AZUL,INDUMENTARIA,EL GALPÓN,SAN MARTÍN 596,2281,585385,15,Provincia de Buenos Aires,slider-coopeplus3,,CooperativaObrera,-36.7798539,-59.8609759
+AZUL,INDUMENTARIA,HAMACA,AMADO DÍA 379,2281,479534,20,Provincia de Buenos Aires,slider-coopeplus3,,CooperativaObrera,-36.7785244,-59.8495547

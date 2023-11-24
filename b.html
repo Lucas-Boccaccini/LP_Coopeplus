@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1;
+    }
+
+    #sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      color: white;
+    }
+
+    #sidebar a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+
+    #sidebar a:hover {
+      color: #f1f1f1;
+    }
+
+    #closeBtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 20px;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    #menuBtn {
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #111;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 15px;
+      margin-right: 15px;
+    }
+
+    #content {
+      transition: margin-right .5s;
+      padding: 16px;
+    }
+
+    #toggleContainer {
+      display: flex;
+      align-items: center;
+    }
+
+    #toggleLabel {
+      margin-right: 10px;
+    }
+
+    #toggleSwitch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    #toggleSwitch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    #toggleSlider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    #toggleSlider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    #toggleSwitch input:checked + #toggleSlider {
+      background-color: #4CAF50;
+    }
+
+    #toggleSwitch input:focus + #toggleSlider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    #toggleSwitch input:checked + #toggleSlider:before {
+      transform: translateX(26px);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sidebar">
+    <a href="#">Inicio</a>
+    <a href="#">Sobre nosotros</a>
+    <a href="#">Contacto</a>
+    <!-- Puedes agregar más enlaces aquí -->
+    <a href="javascript:void(0)" id="closeBtn" onclick="toggleSidebar()">&#9665; Cerrar</a>
+  </div>
+
+  <div id="content">
+    <button id="menuBtn">&#9776; Menú</button>
+    <h2>Contenido Principal</h2>
+    <form>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required>
+      <br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br>
+      <div id="toggleContainer">
+        <span id="toggleLabel">Opción:</span>
+        <label id="toggleSwitch" class="switch">
+          <input type="checkbox" id="toggleCheckbox" onclick="toggleOption()">
+          <span id="toggleSlider" class="slider"></span>
+        </label>
+      </div>
+      <br>
+      <input type="submit" value="Enviar">
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('menuBtn').addEventListener('click', function() {
+      toggleSidebar();
+    });
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('content');
+      if (sidebar.style.width === '400px') {
+        sidebar.style.width = '0';
+        content.style.marginRight = '0';
+      } else {
+        sidebar.style.width = '400px';
+        content.style.marginRight = '400px';
+      }
+    }
+
+    function toggleOption() {
+      const toggleCheckbox = document.getElementById('toggleCheckbox');
+      const optionStatus = toggleCheckbox.checked;
+      console.log('Opción:', optionStatus);
+    }
+
+    // Cerrar el sidebar haciendo clic fuera de él
+    window.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuBtn = document.getElementById('menuBtn');
+      if (event.target !== sidebar && event.target !== menuBtn && event.target.closest('#sidebar') === null) {
+        sidebar.style.width = '0';
+        content.style.marginRight = '0';
+      }
+    });
+  </script>
+
+</body>
+</html>

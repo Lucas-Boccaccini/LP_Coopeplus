@@ -44,6 +44,7 @@ var comerciosFiltrados = [];
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
+
 prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
     CargarLocalidades();
@@ -57,7 +58,8 @@ rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 });
 
-//#region Cargar y analizar el archivo CSV
+
+//#region Analizar el archivo CSV
 fetch('./dir.csv')
     .then(function (response) {
         return response.text();
@@ -205,29 +207,65 @@ function CargarRubros() {
     });
 }
 
-function SetMarker(comercio) {
-    var marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
-    //icono del marcador
-    var customIcon = L.icon({
-        iconUrl: 'img/' + comercio.Dto + '.jpg',
-        iconSize: [40, 32],
-        iconAnchor: [16, 40],
-        popupAnchor: [0, -40]
+function CargarComercios() {
+    //Controla que se seleccione una localidad
+    if (selectedLocalidad === "Seleccione una localidad") {
+        alert("Seleccione una localidad");
+        return;
+    }
+
+    // Limpia los comercios que están por defecto o seleccionados previamente
+    LimpiarComercios();
+
+    // Filtra los comercios en base a las opciones seleccionadas
+    comerciosFiltrados.forEach(function (comercio) {
+        const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
+        const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
+        const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
+
+        var checkboxes = document.querySelectorAll('.dto');
+        const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
+            return checkbox.checked && comercio.Dto === checkbox.value;
+        });
+        //Si Cumple con los criterios
+        if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
+            SetMarker(comercio);
+            CrearCards(comercio);
+            CargarImgCooperativa(comercio);
+
+            if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
+                map.setView([comercio.Latitud, comercio.Longitud], 14);
+            }
+            
+        }
     });
 
-    marker.setIcon(customIcon);
-    // Contenido del marcador 
-    var contenido =
-        '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
-        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
-        '<b>Dirección:</b> ' + comercio.Direccion + '<br>' +
-        '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
-        '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
-    // Asignar el contenido al marcador
-    marker.bindPopup(contenido);
+    // Cerrar menú filtros
+    btnClose.click();
+}
+
+function CargarImgCooperativa(comercio) {
+    // Eliminar la imagen anterior
+    imgprocesada = {}
+
+    if (comercio.Localidad == selectedLocalidad && !imgprocesada[comercio.Localidad]) {
+        img_coop.innerHTML = '';
+        img_coop.removeAttribute("href");
+        let img = document.createElement("img");
+        img.src = "img/" + comercio.ImgCoop + ".svg";
+        img.classList.add("img-fluid", "w-100")
+        if (comercio.ImgCoopLink != "") {
+            img_coop.href = comercio.ImgCoopLink
+            img_coop.target = "_blank"
+        }
+        img_coop.appendChild(img);
+        // Marcar la localidad como procesada
+        imgprocesada[comercio.Localidad] = true;
+    }
 }
 
 function CrearCards(comercio) {
+
     // Crear elementos HTML para la card
     var cardContainer = document.getElementById("cardContainer");
 
@@ -235,8 +273,8 @@ function CrearCards(comercio) {
     cardCol.classList.add("col-lg-3", "col-md-6", "mt-3");
 
     var card = document.createElement("div");
-    card.classList.add("card", "mb-3", "border", "border-2");
-
+    card.classList.add("card", "mb-3","shadow");
+    
     var cardRow = document.createElement("div");
     cardRow.classList.add("row", "g-0");
 
@@ -257,10 +295,10 @@ function CrearCards(comercio) {
 
     var img = document.createElement("img");
     // img.src = "./img/e36258b3c74f08054a974a5fe1703f9c.jpg";
-    if(comercio.ImgComercio == ""){
-        img.src = "./img/"+ comercio.Rubro +".png";
-    }else{
-        img.src = "./img/"+ comercio.ImgComercio +".jpg";
+    if (comercio.ImgComercio == "") {
+        img.src = "./img/" + comercio.Rubro + ".png";
+    } else {
+        img.src = "./img/" + comercio.ImgComercio + ".jpg";
     }
     img.classList.add("img-fluid");
     img.style.height = "200px";
@@ -324,55 +362,81 @@ function CrearCards(comercio) {
 }
 
 function CrearCheckDto() {
-    // Limpiar el contenedor de checkboxes
-    checkContainer.innerHTML = '';
+    //Si no se selecciona localidad, mostrar el resultado anterior
+    if (selectedLocalidad != "Seleccione una localidad") {
+        // Limpiar el contenedor de checkboxes
+        checkContainer.innerHTML = '';
 
-    // Variable para hacer un seguimiento de los descuentos ya agregados
-    let descuentosAgregados = {};
-    let checkboxes = [];
+        // Variable para hacer un seguimiento de los descuentos ya agregados
+        let descuentosAgregados = {};
+        let checkboxes = [];
 
-    // Filtrar descuentos por la localidad seleccionada
-    comerciosFiltrados.forEach(function (comercio) {
-        if (comercio.Localidad === selectedLocalidad) {
-            checkboxes.push(comercio.Dto);
-        }
+        // Filtrar descuentos por la localidad seleccionada
+        comerciosFiltrados.forEach(function (comercio) {
+            if (comercio.Localidad === selectedLocalidad) {
+                checkboxes.push(comercio.Dto);
+            }
+        });
+
+        // Ordenar los descuentos ascendentemente
+        checkboxes.sort(function (a, b) {
+            return a - b;
+        });
+        // Crear un checkbox por cada descuento disponible
+        checkboxes.forEach(descuento => {
+            // Verificar si el descuento ya ha sido agregado
+            if (!descuentosAgregados[descuento]) {
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.classList.add("form-check-input", "dto");
+                checkbox.value = descuento;
+                checkbox.id = descuento + "%";
+                checkbox.checked = true;
+
+                let label = document.createElement("label");
+                label.className = "form-check-label";
+                label.htmlFor = descuento + "%";
+                label.textContent = descuento + "%";
+
+                let divFormCheck = document.createElement("div");
+                divFormCheck.className = "form-check";
+                divFormCheck.appendChild(checkbox);
+                divFormCheck.appendChild(label);
+
+                let divCol = document.createElement("div");
+                divCol.className = "col-4";
+                divCol.appendChild(divFormCheck);
+
+                checkContainer.appendChild(divCol);
+
+                // Marcar el descuento como agregado
+                descuentosAgregados[descuento] = true;
+            }
+        });
+    }
+}
+var marker = "";
+function SetMarker(comercio) {
+     marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
+    //icono del marcador
+    var customIcon = L.icon({
+        iconUrl: 'img/' + comercio.Dto + '.jpg',
+        iconSize: [40, 32],
+        iconAnchor: [16, 40],
+        popupAnchor: [0, -40]
     });
 
-    // Ordenar los descuentos ascendentemente
-    checkboxes.sort(function (a, b) {
-        return a - b;
-    });
-    // Crear un checkbox por cada descuento disponible
-    checkboxes.forEach(descuento => {
-        // Verificar si el descuento ya ha sido agregado
-        if (!descuentosAgregados[descuento]) {
-            let checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.classList.add("form-check-input", "dto");
-            checkbox.value = descuento;
-            checkbox.id = descuento + "%";
-            checkbox.checked = true;
-
-            let label = document.createElement("label");
-            label.className = "form-check-label";
-            label.htmlFor = descuento + "%";
-            label.textContent = descuento + "%";
-
-            let divFormCheck = document.createElement("div");
-            divFormCheck.className = "form-check";
-            divFormCheck.appendChild(checkbox);
-            divFormCheck.appendChild(label);
-
-            let divCol = document.createElement("div");
-            divCol.className = "col-4";
-            divCol.appendChild(divFormCheck);
-
-            checkContainer.appendChild(divCol);
-
-            // Marcar el descuento como agregado
-            descuentosAgregados[descuento] = true;
-        }
-    });
+    marker.setIcon(customIcon);
+    // Contenido del marcador 
+    var contenido =
+        '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
+        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
+        '<b>Dirección:</b> ' + comercio.Direccion + '<br>' +
+        '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
+        '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
+    // Asignar el contenido al marcador
+    marker.bindPopup(contenido);
+    //marker.bindPopup(contenido).openPopup();
 }
 
 function LimpiarFiltro() {
@@ -418,42 +482,6 @@ function LimpiarFiltro() {
     CargarComercios();
 }
 
-function CargarComercios() {
-    //Controla que se seleccione una localidad
-    if (selectedLocalidad === "Seleccione una localidad") {
-        alert("Seleccione una localidad");
-        return;
-    }
-
-    // Limpia los comercios que están por defecto o seleccionados previamente
-    LimpiarComercios();
-
-    // Filtra los comercios en base a las opciones seleccionadas
-    comerciosFiltrados.forEach(function (comercio) {
-        const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
-        const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
-        const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
-
-        var checkboxes = document.querySelectorAll('.dto');
-        const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
-            return checkbox.checked && comercio.Dto === checkbox.value;
-        });
-        //Si Cumple con los criterios
-        if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
-            SetMarker(comercio);
-            CrearCards(comercio);
-            CargarImgCooperativa(comercio);
-
-            if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
-                map.setView([comercio.Latitud, comercio.Longitud], 14);
-            }
-        }
-    });
-
-    // Cerrar menú filtros
-    btnClose.click();
-}
-
 function LimpiarComercios() {
     // Elimina el marcador
     map.eachLayer(function (layer) {
@@ -469,22 +497,3 @@ function LimpiarComercios() {
     map.setView([-38.7183, -62.2661], 14);
 }
 
-function CargarImgCooperativa(comercio) {
-    // Eliminar la imagen anterior
-    imgprocesada = {}
-
-    if (comercio.Localidad == selectedLocalidad && !imgprocesada[comercio.Localidad]) {
-        img_coop.innerHTML = '';
-        img_coop.removeAttribute("href");
-        let img = document.createElement("img");
-        img.src = "img/" + comercio.ImgCoop + ".svg";
-        img.classList.add("img-fluid", "w-100")
-        if (comercio.ImgCoopLink != "") {
-            img_coop.href = comercio.ImgCoopLink
-            img_coop.target = "_blank"
-        }
-        img_coop.appendChild(img);
-        // Marcar la localidad como procesada
-        imgprocesada[comercio.Localidad] = true;
-    }
-}

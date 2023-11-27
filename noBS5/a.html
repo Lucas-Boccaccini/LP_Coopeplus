@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <h3>Filtro</h3>
+      <a id="closeBtn"><i class="fas fa-xmark fa-xl"></i></a>
+    </div>
+    <div class="sidebar-body">
+      <div class="form-group">
+        <label class="label" for="provId">Provincia:</label>
+        <select id="provId" name="provId" required>
+          <option value="-1" disabled selected>Selecciona tu Provincia</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="label" for="localidadId">Localidad:</label>
+        <select id="localidadId" name="localidadId" required>
+          <option value="-1" disabled selected>Selecciona tu localidad</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="label" for="rubroId">Rubro:</label>
+        <select id="rubroId" name="rubroId" required>
+          <option value="-1" selected>TODOS</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom: 20px;">
+        <label class="label">Porcetaje de descuento:</label>
+        <div id="checkContainer">
+          <div class="check">
+            <input type="checkbox" value="" id="10%" checked="">
+            <label for="10%">10%</label>
+          </div>
+          <div class="check">
+            <input type="checkbox" value="" id="15%" checked="">
+            <label for="15%">15%</label>
+          </div>
+        </div>
+      </div>
+      <div id="toggleContainer" style="margin-bottom: 20px;">
+        <span id="toggleLabel">Mostrar mapa:</span>
+        <label id="toggleSwitch" class="switch">
+          <input type="checkbox" id="toggleCheckbox">
+          <span id="toggleSlider" class="slider"></span>
+        </label>
+      </div>
+      <div class="div-btn">
+        <button class="btn-outline">Limpiar</button>
+        <button class="btn-fill">Aplicar</button>
+      </div>
+    </div>
+    <!-- Puedes agregar más enlaces aquí -->
+  </div>
+
+  <div id="overlay" onclick="toggleSidebar()"></div>
+
+  <div id="content">
+    <div class="main-manu">
+      <div class="buscar">
+        <input type="text" name="" id="inputBuscar" placeholder="Buscar...">
+        <button class="btnBuscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+      <button class="btn-outline" id="menuBtn">&#9776; Menú</button>
+    </div>
+  </div>
+
+  <script src="https://kit.fontawesome.com/a3c0028fb8.js" crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

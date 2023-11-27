@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <style>
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f8f9fa; 
+      background-color: #f8f9fa; /* Cambié el color de fondo a un tono más claro */
     }
 
     #sidebar {
       height: 100%;
       width: 0;
       position: fixed;
-      z-index: 2; 
+      z-index: 2; /* Ajusté el z-index para que esté por encima del contenido principal */
       top: 0;
       right: 0;
-      background-color: #343a40; 
+      background-color: #343a40; /* Cambié el color de fondo del sidebar */
       overflow-x: hidden;
-      transition: 0.3s; 
-      padding-top: 60px;
+      transition: 0.3s; /* Cambié la duración de la transición a 0.3s */
       color: white;
     }
 
@@ -38,10 +38,20 @@
       color: #f1f1f1;
     }
 
+    #sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background-color: #343a40; /* Cambié el color de fondo del encabezado */
+      box-shadow: 0 4px 2px -2px gray; /* Agregué sombreado en la parte inferior del encabezado */
+    }
+
+    #sidebar-header h2 {
+      margin: 0;
+    }
+
     #closeBtn {
-      position: absolute;
-      top: 0;
-      right: 25px;
       font-size: 20px;
       color: white;
       text-decoration: none;
@@ -58,42 +68,19 @@
       z-index: 1; 
       margin-left: 10px;
       border-radius: 8px;
-
     }
+
     #menuBtn:hover {
       background-color: #2196F3; 
       color: #FFF;
       border: 1px solid #2196F3;
     }
-    .buscar{
-      display:flex;
-      margin-right: 10px;
-      
-    }
-    .buscar .btnBuscar{
-      border-radius: 0 25px 25px 0;
-      background-color: #FFF; 
-      color: #2196F3;
-      border: 1px solid #2196F3;
-    }
-    .buscar input{
-      border-radius: 25px 0 0 25px;
-      padding: 0px 12px;
-      background-color: #FFF; 
-      border: 1px solid #dee2e6; 
-    }
-    #inputBuscar:focus {
-    border-color: #2196F3; /* Cambia el color del borde cuando el input está enfocado */
-  }
 
-  #menuBtn:focus {
-    border-color: #2196F3; /* Cambia el color del borde cuando el botón está enfocado */
-  }
     #content {
-      transition: margin-right .3s; 
+      transition: margin-right .3s; /* Cambié la duración de la transición a 0.3s */
       padding: 16px;
       position: relative;
-      z-index: 1; 
+      z-index: 1; /* Ajusté el z-index para que esté debajo del sidebar */
     }
 
     #overlay {
@@ -103,8 +90,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); 
-      z-index: 2;
+      background-color: rgba(0, 0, 0, 0.5); /* Fondo semi transparente */
+      z-index: 0;
     }
 
     #toggleContainer {
@@ -167,40 +154,29 @@
 
     /* Ajustes para opacar el formulario cuando el sidebar está abierto */
     #content.sidebar-opened {
-      /* opacity: 0.7; */
-      
+      opacity: 0.7;
       pointer-events: none; /* Evita la interacción con el formulario */
     }
-
-
   </style>
 </head>
 <body>
 
   <div id="sidebar">
+    <div id="sidebar-header">
+      <h2>Filtro</h2>
+      <a href="javascript:void(0)" id="closeBtn" onclick="toggleSidebar()"><i class="fas fa-xmark fa-xl"></i> Cerrar</a>
+    </div>
     <a href="#">Inicio</a>
     <a href="#">Sobre nosotros</a>
     <a href="#">Contacto</a>
     <!-- Puedes agregar más enlaces aquí -->
-    <a id="closeBtn" onclick="toggleSidebar()">&#9665; Cerrar</a>
   </div>
 
   <div id="overlay" onclick="toggleSidebar()"></div>
 
   <div id="content">
+    <button id="menuBtn">&#9776; Menú</button>
     <h2>Contenido Principal</h2>
-    <div style="
-    display:flex;
-    justify-content: center;
-    
-    ">
-      <div class="buscar">
-      
-        <input type="text" name="" id="inputBuscar"> 
-        <button class="btnBuscar">buscar</button>
-      </div>
-      <button id="menuBtn">&#9776; Menú</button>
-    </div>
     <form>
       <label for="nombre">Nombre:</label>
       <input type="text" id="nombre" name="nombre" required>
@@ -232,11 +208,11 @@
       content.classList.toggle('sidebar-opened'); // Añade o quita la clase según el estado
       if (sidebar.style.width === '400px') { // Cambié el ancho a 400px
         sidebar.style.width = '0';
-        //content.style.marginRight = '0';
+        content.style.marginRight = '0';
         overlay.style.display = 'none';
       } else {
         sidebar.style.width = '400px'; // Cambié el ancho a 400px
-       // content.style.marginRight = '400px'; // Cambié el ancho a 400px
+        content.style.marginRight = '400px'; // Cambié el ancho a 400px
         overlay.style.display = 'block';
       }
     }
@@ -254,7 +230,7 @@
       const overlay = document.getElementById('overlay');
       if (event.target !== sidebar && event.target !== menuBtn && event.target.closest('#sidebar') === null) {
         sidebar.style.width = '0';
-        //content.style.marginRight = '0';
+        content.style.marginRight = '0';
         overlay.style.display = 'none';
         content.classList.remove('sidebar-opened');
       }

@@ -1,193 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f1f1f1;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con CSS puro</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    #sidebar {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      right: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      transition: 0.5s;
-      padding-top: 60px;
-      color: white;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    #sidebar a {
-      padding: 8px 8px 8px 32px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #818181;
-      display: block;
-      transition: 0.3s;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    #sidebar a:hover {
-      color: #f1f1f1;
-    }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
-    #closeBtn {
-      position: absolute;
-      top: 0;
-      right: 25px;
-      font-size: 20px;
-      color: white;
-      text-decoration: none;
-      cursor: pointer;
-    }
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 3px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    #menuBtn {
-      font-size: 20px;
-      cursor: pointer;
-      background-color: #111;
-      color: white;
-      border: none;
-      padding: 10px;
-      margin-top: 15px;
-      margin-right: 15px;
-    }
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
 
-    #content {
-      transition: margin-right .5s;
-      padding: 16px;
-    }
+        input[type="checkbox"] {
+            margin-top: 10px;
+        }
 
-    #toggleContainer {
-      display: flex;
-      align-items: center;
-    }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    #toggleLabel {
-      margin-right: 10px;
-    }
-
-    #toggleSwitch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-
-    #toggleSwitch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    #toggleSlider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
-    }
-
-    #toggleSlider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-
-    #toggleSwitch input:checked + #toggleSlider {
-      background-color: #4CAF50;
-    }
-
-    #toggleSwitch input:focus + #toggleSlider {
-      box-shadow: 0 0 1px #2196F3;
-    }
-
-    #toggleSwitch input:checked + #toggleSlider:before {
-      transform: translateX(26px);
-    }
-  </style>
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="sidebar">
-    <a href="#">Inicio</a>
-    <a href="#">Sobre nosotros</a>
-    <a href="#">Contacto</a>
-    <!-- Puedes agregar más enlaces aquí -->
-    <a href="javascript:void(0)" id="closeBtn" onclick="toggleSidebar()">&#9665; Cerrar</a>
-  </div>
+    <div class="form-group">
+        <label for="username">Nombre de usuario:</label>
+        <input type="text" id="username" name="username" placeholder="Ingresa tu nombre de usuario" required>
+    </div>
 
-  <div id="content">
-    <button id="menuBtn">&#9776; Menú</button>
-    <h2>Contenido Principal</h2>
-    <form>
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" name="nombre" required>
-      <br>
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <br>
-      <div id="toggleContainer">
-        <span id="toggleLabel">Opción:</span>
-        <label id="toggleSwitch" class="switch">
-          <input type="checkbox" id="toggleCheckbox" onclick="toggleOption()">
-          <span id="toggleSlider" class="slider"></span>
-        </label>
-      </div>
-      <br>
-      <input type="submit" value="Enviar">
-    </form>
-  </div>
+    <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+    </div>
 
-  <script>
-    document.getElementById('menuBtn').addEventListener('click', function() {
-      toggleSidebar();
-    });
+    <div class="form-group">
+        <label for="country">País:</label>
+        <select id="country" name="country" required>
+            <option value="" disabled selected>Selecciona tu país</option>
+            <option value="argentina">Argentina</option>
+            <option value="mexico">México</option>
+            <option value="espana">España</option>
+        </select>
+    </div>
 
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const content = document.getElementById('content');
-      if (sidebar.style.width === '400px') {
-        sidebar.style.width = '0';
-        content.style.marginRight = '0';
-      } else {
-        sidebar.style.width = '400px';
-        content.style.marginRight = '400px';
-      }
-    }
+    <div class="form-group">
+        <input type="checkbox" id="subscribe" name="subscribe">
+        <label for="subscribe">Suscribirse a noticias</label>
+    </div>
 
-    function toggleOption() {
-      const toggleCheckbox = document.getElementById('toggleCheckbox');
-      const optionStatus = toggleCheckbox.checked;
-      console.log('Opción:', optionStatus);
-    }
-
-    // Cerrar el sidebar haciendo clic fuera de él
-    window.addEventListener('click', function(event) {
-      const sidebar = document.getElementById('sidebar');
-      const menuBtn = document.getElementById('menuBtn');
-      if (event.target !== sidebar && event.target !== menuBtn && event.target.closest('#sidebar') === null) {
-        sidebar.style.width = '0';
-        content.style.marginRight = '0';
-      }
-    });
-  </script>
+    <button type="submit">Enviar</button>
 
 </body>
 </html>

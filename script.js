@@ -1,10 +1,12 @@
 let prov = document.getElementById("provId");
 let localidad = document.getElementById("localidadId");
 let rubro = document.getElementById("rubroId");
-let mapaVisible = document.getElementById("mapaVisible");
-let filtro = document.getElementById("filtro");
+// let mapaVisible = document.getElementById("mapaVisible");
+let mapaVisible = document.getElementById("toggleCheckbox");
+let filtro = document.getElementById("content");
+// let filtro = document.getElementById("filtro");
 let mapa = document.getElementById("map");
-let btnClose = document.getElementById("btn-close");
+let closeBtn = document.getElementById("closeBtn");
 let img_coop = document.getElementById("imgCoope");
 
 mapaVisible.addEventListener("change", function () {
@@ -58,9 +60,8 @@ rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 });
 
-
 //#region Analizar el archivo CSV
-fetch('./dir.csv')
+fetch('./nuevo_archivo (19).csv')
     .then(function (response) {
         return response.text();
     })
@@ -136,8 +137,10 @@ function CargarProvincias() {
 function CargarLocalidades() {
     // Limpia opciones antiguas
     localidadesProcesadas = {};
+
     localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
     selectedLocalidad = "Seleccione una localidad";
+    
     // Cargar nuevas localidades
     var localidades = [];
 
@@ -203,6 +206,7 @@ function CargarRubros() {
     rubros.forEach(function (rubroNombre) {
         var optionRubro = document.createElement("option");
         optionRubro.text = rubroNombre;
+
         rubro.add(optionRubro);
     });
 }
@@ -239,9 +243,8 @@ function CargarComercios() {
             
         }
     });
-
     // Cerrar menú filtros
-    btnClose.click();
+    closeBtn.click();
 }
 
 function CargarImgCooperativa(comercio) {
@@ -249,6 +252,9 @@ function CargarImgCooperativa(comercio) {
     imgprocesada = {}
 
     if (comercio.Localidad == selectedLocalidad && !imgprocesada[comercio.Localidad]) {
+        if(!comercio.ImgCoop){
+            return;
+        }
         img_coop.innerHTML = '';
         img_coop.removeAttribute("href");
         let img = document.createElement("img");
@@ -386,35 +392,57 @@ function CrearCheckDto() {
         checkboxes.forEach(descuento => {
             // Verificar si el descuento ya ha sido agregado
             if (!descuentosAgregados[descuento]) {
+                // let checkbox = document.createElement("input");
+                // checkbox.type = "checkbox";
+                // checkbox.classList.add("form-check-input", "dto");
+                // checkbox.value = descuento;
+                // checkbox.id = descuento + "%";
+                // checkbox.checked = true;
+
+                // let label = document.createElement("label");
+                // label.className = "form-check-label";
+                // label.htmlFor = descuento + "%";
+                // label.textContent = descuento + "%";
+
+                // let divFormCheck = document.createElement("div");
+                // divFormCheck.className = "form-check";
+                // divFormCheck.appendChild(checkbox);
+                // divFormCheck.appendChild(label);
+
+                // let divCol = document.createElement("div");
+                // divCol.className = "col-4";
+                // divCol.appendChild(divFormCheck);
+
+                // checkContainer.appendChild(divCol);
+
+                // // Marcar el descuento como agregado
+                // descuentosAgregados[descuento] = true;
+
+                //---------------------------------------------------
+
                 let checkbox = document.createElement("input");
+                checkbox.classList.add("dto");
                 checkbox.type = "checkbox";
-                checkbox.classList.add("form-check-input", "dto");
                 checkbox.value = descuento;
                 checkbox.id = descuento + "%";
                 checkbox.checked = true;
 
                 let label = document.createElement("label");
-                label.className = "form-check-label";
                 label.htmlFor = descuento + "%";
                 label.textContent = descuento + "%";
 
-                let divFormCheck = document.createElement("div");
-                divFormCheck.className = "form-check";
-                divFormCheck.appendChild(checkbox);
-                divFormCheck.appendChild(label);
+                let divCheck = document.createElement("div");
+                divCheck.className = "check";
+                divCheck.appendChild(checkbox);
+                divCheck.appendChild(label);
 
-                let divCol = document.createElement("div");
-                divCol.className = "col-4";
-                divCol.appendChild(divFormCheck);
-
-                checkContainer.appendChild(divCol);
-
-                // Marcar el descuento como agregado
+                checkContainer.appendChild(divCheck);
                 descuentosAgregados[descuento] = true;
             }
         });
     }
 }
+
 var marker = "";
 function SetMarker(comercio) {
      marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
@@ -441,16 +469,15 @@ function SetMarker(comercio) {
 
 function LimpiarFiltro() {
     selectedProvincia = "Provincia de Buenos Aires";
-    selectedLocalidad = "BAHÍA BLANCA";
-    selectedRubro = "TODOS";
-
     prov.value = selectedProvincia;
-    localidad.value = selectedLocalidad;
-    rubro.value = selectedRubro;
-
-    //Cargar las opciones de localidades y rubros con los valores predeterminados
     CargarLocalidades();
+    selectedLocalidad = "BAHÍA BLANCA";
+    localidad.value = selectedLocalidad;
+    //selectedRubro = "TODOS";
     CargarRubros();
+    CrearCheckDto();
+    //Cargar las opciones de localidades y rubros con los valores predeterminados
+    //rubro.value = selectedRubro;
 
     // Establecer el atributo selected en las opciones predeterminadas
     var provinciaOption = document.querySelector(`#provincia option[value="${selectedProvincia}"]`);
@@ -478,7 +505,7 @@ function LimpiarFiltro() {
     check.forEach(dto => {
         dto.checked = true
     })
-
+    
     CargarComercios();
 }
 
@@ -496,4 +523,3 @@ function LimpiarComercios() {
 
     map.setView([-38.7183, -62.2661], 14);
 }
-

@@ -1,40 +1,62 @@
 document.getElementById('menuBtn').addEventListener('click', function () {
-    toggleSidebar();
-  });
+  toggleSidebar();
+});
+function toggleSidebar() {
+  const body = document.body;
+  const sidebar = document.getElementById('sidebar');
+  //const content = document.getElementById('content');
+  const overlay = document.getElementById('overlay');
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-  function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const content = document.getElementById('content');
-    const overlay = document.getElementById('overlay');
-    content.classList.toggle('sidebar-opened'); // Añade o quita la clase según el estado
-    if (sidebar.style.width === '400px') { // Cambié el ancho a 400px
+  if (screenWidth <= 576) {
+    if (sidebar.style.width === '100%') {
       sidebar.style.width = '0';
-      //content.style.marginRight = '0';
       overlay.style.display = 'none';
+      body.classList.remove('sidebar-opened');
     } else {
-      sidebar.style.width = '400px'; // Cambié el ancho a 400px
-      // content.style.marginRight = '400px'; // Cambié el ancho a 400px
+      sidebar.style.width = '100%';
       overlay.style.display = 'block';
+      body.classList.add('sidebar-opened');
+    }
+  } else {
+    //body.classList.toggle('sidebar-opened');
+    if (sidebar.style.width === '400px') {
+      sidebar.style.width = '0';
+      overlay.style.display = 'none';
+      body.classList.remove('sidebar-opened');
+    } else {
+      sidebar.style.width = '400px';
+      overlay.style.display = 'block';
+      body.classList.add('sidebar-opened');
     }
   }
+}
 
-  // Cerrar el sidebar haciendo clic fuera de él
-  window.addEventListener('click', function (event) {
-    const sidebar = document.getElementById('sidebar');
-    const menuBtn = document.getElementById('menuBtn');
-    const overlay = document.getElementById('overlay');
-    if (event.target !== sidebar && event.target !== menuBtn && event.target.closest('#sidebar') === null) {
-      sidebar.style.width = '0';
-      //content.style.marginRight = '0';
-      overlay.style.display = 'none';
-      content.classList.remove('sidebar-opened');
-    }
-  });
-//   function toggleOption() {
-//     const toggleCheckbox = document.getElementById('toggleCheckbox');
-//     const optionStatus = toggleCheckbox.checked;
-//     console.log('Opción:', optionStatus);
-//   }
-  document.getElementById("closeBtn").addEventListener("click", function() {
-    toggleSidebar();
-  })
+window.addEventListener('click', function (event) {
+  const body = document.body;
+  const sidebar = document.getElementById('sidebar');
+  const menuBtn = document.getElementById('menuBtn');
+  const overlay = document.getElementById('overlay');
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+  if (screenWidth <= 576 && event.target !== sidebar && event.target !== menuBtn && event.target.closest('#sidebar') === null) {
+    sidebar.style.width = '0';
+    overlay.style.display = 'none';
+    body.classList.remove('sidebar-opened');
+  } else if (screenWidth > 576 && event.target !== sidebar && event.target !== menuBtn && event.target.closest('#sidebar') === null) {
+    sidebar.style.width = '0';
+    overlay.style.display = 'none';
+    content.classList.remove('sidebar-opened');
+    body.classList.remove('sidebar-opened');
+  }
+});
+
+document.getElementById("closeBtn").addEventListener("click", function () {
+  const body = document.body;
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  sidebar.style.width = '0';
+  overlay.style.display = 'none';
+  body.classList.remove('sidebar-opened');
+});

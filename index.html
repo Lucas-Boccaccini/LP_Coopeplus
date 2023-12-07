@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-bs-theme="auto">
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -11,41 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <link rel="stylesheet" href="./noBS5/style.css">
-
-
-    <style>
-        /* #map {
-            margin-top: 10vh;
-        } */
-
-        .col-4>img {
-            border-radius: 25px 25px 0 0;
-        }
-
-        .card {
-            border-radius: 25px;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-        }
-
-        .nav-link:hover {
-            color: #c0d3f0 !important
-        }
-
-        .navbar-collapse {
-            flex-grow: 0 !important;
-        }
-
-        @media (max-width: 576px) {
-            .filtro {
-                height: 65vh;
-                width: 100vw !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="./sidebar/style.css">
 </head>
 
 <body class="bg-light">
@@ -135,7 +101,9 @@
             <div class="main-menu">
                 <div class="buscar">
                     <input type="text" name="" id="inputBuscar" placeholder="Buscar...">
-                    <button class="btnBuscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button class="btnBuscar" onclick="CargarComercios()">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                 </div>
                 <button class="btn-outline" id="menuBtn">Filtros <i class="fa-solid fa-bars"></i></button>
             </div>
@@ -150,8 +118,7 @@
         </a>
 
         <footer>
-            <section id="sub-bar" class="container-fluid d-flex justify-content-center"
-                style="background-color: #dc3545!important;">
+            <section class="container-fluid d-flex justify-content-center" style="background-color: #dc3545!important;">
                 <a href="https://www.coopeplus.com.ar/Home/Consultas" class="mr-2 pr-4 py-3 text-decoration-none"
                     style="color: #ffffff;">CONSULTAS</a>
                 <div class="border border-left mx-5" style="color:#FFF"></div>
@@ -164,7 +131,7 @@
                     Contratos de adhesión - Ley Nº 24.240 de Defensa al Consumidor
                 </a>
             </p>
-            <section id="pre-footer" class="container py-5 px-5 w-75">
+            <section class="container py-5 px-5 w-75">
                 <div class="row mx-n5 align-items-center justify-content-center">
                     <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
                         <a href="https://www.cooperativaobrera.coop/" target="_blank" rel="noopener noreferrer">
@@ -188,7 +155,7 @@
                     </div>
                 </div>
             </section>
-            <section id="footer" class="container py-4 border-top border-light">
+            <section class="container py-4 border-top border-light">
                 <div class="row flex-column flex-md-row">
                     <div class="col col-md-3 my-2 d-flex flex-column justify-content-around order-3">
                         <div>
@@ -275,13 +242,11 @@
                                         href="https://www.coopeplus.com.ar/Home/QuienesSomos"
                                         class="text-decoration-none text-dark">Nuestra tarjeta</a></p>
                             </li>
-
                         </ul>
                     </div>
                 </div>
             </section>
         </footer>
-
     </main>
     <!-- BS5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -295,7 +260,7 @@
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
-    <script src="./noBS5/script.js"></script>
+    <script src="./sidebar/script.js"></script>
 
 </body>
 

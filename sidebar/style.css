@@ -32,7 +32,6 @@ nav{
     align-items: center;
     padding: 16px;
     background-color: #FFF;
-    /* box-shadow: 0 4px 2px -2px gray; */
     box-sizing: border-box;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     width: inherit; 
@@ -40,10 +39,9 @@ nav{
 
 #sidebar-header h3 {
     margin: 0;
-    /* flex-grow: 1; El título "Filtro" ocupa todo el espacio disponible */
     overflow: hidden;
-    text-overflow: ellipsis; /* Se muestra un "..." si el texto es demasiado largo */
-    white-space: wrap; /* Evita que el texto se desplace a la siguiente línea */
+    text-overflow: ellipsis; 
+    white-space: wrap;
 }
 
 .sidebar-body {
@@ -79,7 +77,6 @@ nav{
     justify-content: space-around;
     align-items:center;
     gap: 10px;
-
 }
 .check{
     display: flex;
@@ -110,28 +107,19 @@ input[type="checkbox"] {
 }
 
 #sidebar #closeBtn:hover {
-    /* color: #6d6c6c */
     color: #212529;
-
 }
 
 #closeBtn {
-    /* position: absolute;
-    top: 16px;
-    right: 16px;*/
     font-size: 20px;
-    /* color: #212529; */
     color: #6d6c6c;
-
     text-decoration: none;
     cursor: pointer;
-    /*style="position: absolute; right:40px;"*/
 }
 
 .main-menu {
     display: flex;
     justify-content: center;
-    /* justify-content: space-between; */
     width: 75%;
     gap:20px;
 }
@@ -144,24 +132,20 @@ input[type="checkbox"] {
     border: 1px solid #0d6efd;
     padding: 6px 10px;
     z-index: 1;
-    /* margin-left: 10px; */
     border-radius: 8px;
 }
 
 .div-btn 
 .btn-outline, .btn-fill{
-    /* width: 48%; */
     width: 48%;
     font-size: 16px;
 }
 
 .btn-fill{
-    /* font-size: 20px; */
     cursor: pointer;
     border: 1px solid #0d6efd;
     padding: 6px 10px;
     z-index: 1;
-    /* margin-left: 10px;  */
     border-radius: 8px;
     background-color:#0d6efd; 
     color: #FFF;
@@ -305,11 +289,26 @@ body{
 body.sidebar-opened {
     overflow: hidden;
 }
+.col-4>img {
+    border-radius: 25px 25px 0 0;
+}
 
-/* #content.sidebar-opened {
-    pointer-events: none;
-    overflow: hidden;
-} */
+.card {
+    border-radius: 25px;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.nav-link:hover {
+    color: #c0d3f0 !important
+}
+
+.navbar-collapse {
+    flex-grow: 0 !important;
+}
+
 
 @media (min-width: 577px)  and (max-width: 768px) {
     #content {
@@ -327,12 +326,6 @@ body.sidebar-opened {
     #sidebar {
         height: 65%;
     }
-    /* .main-menu .btn-outline{
-        width: 25%;
-    }
-    .main-menu .buscar{
-        width: 70%;
-    } */
     .main-menu{
         width: 100%;
     }
@@ -340,35 +333,18 @@ body.sidebar-opened {
         margin: 16px 0px;
         padding: 0px 12px;
     }
+    .filtro {
+        height: 65vh;
+        width: 100vw !important;
+    }
 }
 
 @media (min-width: 375px)  and (max-width: 400px) {
-    /* .main-menu .btn-outline{
-        width: 25%;
-    }
-    .main-menu .buscar{
-        width: 70%;
-    } */
-    /* #content {
-        margin: 16px 0px;
-        padding: 0px 12px;
-    } */
     .main-menu{
         gap: 13px;
     }
 }
 @media (min-width: 320px)  and (max-width: 374px) {
-    /* .main-menu .btn-outline{
-        width: 30%;
-    }
-    .main-menu .buscar{
-        width: 60%;
-    }
-    */
-    /* #content {
-        margin: 16px 0px;
-        padding: 0px 12px;
-    } */
     .main-menu{
         gap: 0px;
     }

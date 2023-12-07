@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+        }
+
+        .custom-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin-top: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 25px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .text-truncate {
+            margin-bottom: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .badge {
+            position: absolute;
+            top: -0.8rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007bff;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 0.375rem;
+            width: 50%;
+            text-align: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .image-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            height:200px; 
+            width:100%;
+            border-radius: 25px 25px 0 0;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 0 1rem 1rem 1rem;
+        }
+
+        .custom-hr {
+            border: 1px solid rgb(66, 115, 180);
+            margin: 10px 0;
+        }
+
+        .col {
+            width: 302px;
+            height: 210px;
+        }
+
+        /* Media query para pantallas más pequeñas que 767px */
+        @media (max-width: 567px) {
+            .custom-card {
+                flex-direction: row;
+            }
+
+            .image-container {
+                width: 50%;
+            }
+
+            .image-container img {
+                border-radius: 25px 0 0 25px;
+            }
+
+            .card-content {
+                width: 50%;
+                padding: 1rem 1rem 1rem 1rem;
+            }
+
+            .col {
+                width: 100%;
+                height: 210px;
+            }
+        }
+        @media (max-width: 400px){
+            .image-container img {
+                object-fit: fill;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col">
+        <div class="custom-card">
+            <div class="badge">15% dto</div>
+            <div class="image-container">
+                <img src="./img/CooperativaObrera.jpg" alt="coopeplus">
+            </div>
+            <div class="card-content">
+                <h3 style="text-align: center; margin: 0">YPF</h3>
+                <hr class="custom-hr">
+                <p class="text-truncate">ESTACION DE SERVICIO</p>
+                <p class="text-truncate">GENERAL PAZ 225</p>
+                <p class="text-truncate">CHOS MALAL</p>
+                <p class="text-truncate">NEUQUEN</p>
+                <p class="text-truncate" style="color: #5a5c69;">
+                    <i class="fas fa-phone-flip"></i> 02948-421336
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

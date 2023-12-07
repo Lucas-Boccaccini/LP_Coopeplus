@@ -1,3 +1,4 @@
+let buscar = document.getElementById("inputBuscar");
 let prov = document.getElementById("provId");
 let localidad = document.getElementById("localidadId");
 let rubro = document.getElementById("rubroId");
@@ -140,7 +141,7 @@ function CargarLocalidades() {
 
     localidad.innerHTML = '<option value="-1" disabled selected>Seleccione una localidad</option>';
     selectedLocalidad = "Seleccione una localidad";
-    
+
     // Cargar nuevas localidades
     var localidades = [];
 
@@ -211,18 +212,54 @@ function CargarRubros() {
     });
 }
 
+// function CargarComercios() {
+//     //Controla que se seleccione una localidad
+//     if (selectedLocalidad === "Seleccione una localidad") {
+//         alert("Seleccione una localidad");
+//         return;
+//     }
+
+//     // Limpia los comercios que están por defecto o seleccionados previamente
+//     LimpiarComercios();
+
+//     // Filtra los comercios en base a las opciones seleccionadas
+//     comerciosFiltrados.forEach(function (comercio) {
+//         const cumpleBuscar = buscar == "" || comercio.NomComercio == buscar.value
+//         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
+//         const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
+//         const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
+
+//         var checkboxes = document.querySelectorAll('.dto');
+//         const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
+//             return checkbox.checked && comercio.Dto === checkbox.value;
+//         });
+//         //Si Cumple con los criterios
+//         if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
+//             SetMarker(comercio);
+//             CrearCards(comercio);
+//             CargarImgCooperativa(comercio);
+
+//             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
+//                 map.setView([comercio.Latitud, comercio.Longitud], 14);
+//             }
+
+//         }
+//     });
+//     // Cerrar menú filtros
+//     closeBtn.click();
+// }
+
 function CargarComercios() {
     //Controla que se seleccione una localidad
     if (selectedLocalidad === "Seleccione una localidad") {
         alert("Seleccione una localidad");
         return;
     }
-
     // Limpia los comercios que están por defecto o seleccionados previamente
     LimpiarComercios();
 
-    // Filtra los comercios en base a las opciones seleccionadas
     comerciosFiltrados.forEach(function (comercio) {
+        const cumpleBuscar = buscar == "" || removeAccents(comercio.NomComercio).toLowerCase().includes(removeAccents(buscar.value).toLowerCase())
         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
         const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
         const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
@@ -232,19 +269,21 @@ function CargarComercios() {
             return checkbox.checked && comercio.Dto === checkbox.value;
         });
         //Si Cumple con los criterios
-        if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
+        if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento && cumpleBuscar) {
             SetMarker(comercio);
             CrearCards(comercio);
             CargarImgCooperativa(comercio);
-
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
                 map.setView([comercio.Latitud, comercio.Longitud], 14);
             }
-            
         }
     });
     // Cerrar menú filtros
     closeBtn.click();
+}
+
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function CargarImgCooperativa(comercio) {
@@ -252,7 +291,7 @@ function CargarImgCooperativa(comercio) {
     imgprocesada = {}
 
     if (comercio.Localidad == selectedLocalidad && !imgprocesada[comercio.Localidad]) {
-        if(!comercio.ImgCoop){
+        if (!comercio.ImgCoop) {
             return;
         }
         img_coop.innerHTML = '';
@@ -279,8 +318,8 @@ function CrearCards(comercio) {
     cardCol.classList.add("col-lg-3", "col-md-6", "mt-3");
 
     var card = document.createElement("div");
-    card.classList.add("card", "mb-3","shadow");
-    
+    card.classList.add("card", "mb-3", "shadow");
+
     var cardRow = document.createElement("div");
     cardRow.classList.add("row", "g-0");
 
@@ -445,7 +484,7 @@ function CrearCheckDto() {
 
 var marker = "";
 function SetMarker(comercio) {
-     marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
+    marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
     //icono del marcador
     var customIcon = L.icon({
         iconUrl: 'img/' + comercio.Dto + '.jpg',
@@ -505,7 +544,7 @@ function LimpiarFiltro() {
     check.forEach(dto => {
         dto.checked = true
     })
-    
+
     CargarComercios();
 }
 

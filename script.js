@@ -60,7 +60,9 @@ localidad.addEventListener("change", function () {
 rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 });
-
+buscar.addEventListener("input", function(){
+    CargarComercios();
+})
 //#region Analizar el archivo CSV
 fetch('./nuevo_archivo (19).csv')
     .then(function (response) {
@@ -113,8 +115,8 @@ function CargarProvincias() {
             provinciasProcesadas[comercio.Provincia] = true;
 
             // Establecer por defecto la provincia "Provincia de Buenos Aires"
-            if (comercio.Provincia === "Provincia de Buenos Aires") {
-                selectedProvincia = "Provincia de Buenos Aires";
+            if (comercio.Provincia === "BUENOS AIRES") {
+                selectedProvincia = "BUENOS AIRES";
             }
         }
     });
@@ -212,43 +214,6 @@ function CargarRubros() {
     });
 }
 
-// function CargarComercios() {
-//     //Controla que se seleccione una localidad
-//     if (selectedLocalidad === "Seleccione una localidad") {
-//         alert("Seleccione una localidad");
-//         return;
-//     }
-
-//     // Limpia los comercios que están por defecto o seleccionados previamente
-//     LimpiarComercios();
-
-//     // Filtra los comercios en base a las opciones seleccionadas
-//     comerciosFiltrados.forEach(function (comercio) {
-//         const cumpleBuscar = buscar == "" || comercio.NomComercio == buscar.value
-//         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
-//         const cumpleLocalidad = selectedLocalidad === "Seleccione una localidad" || comercio.Localidad === selectedLocalidad;
-//         const cumpleRubro = selectedRubro === "TODOS" || comercio.Rubro === selectedRubro;
-
-//         var checkboxes = document.querySelectorAll('.dto');
-//         const cumpleDescuento = Array.from(checkboxes).some(function (checkbox) {
-//             return checkbox.checked && comercio.Dto === checkbox.value;
-//         });
-//         //Si Cumple con los criterios
-//         if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento) {
-//             SetMarker(comercio);
-//             CrearCards(comercio);
-//             CargarImgCooperativa(comercio);
-
-//             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
-//                 map.setView([comercio.Latitud, comercio.Longitud], 14);
-//             }
-
-//         }
-//     });
-//     // Cerrar menú filtros
-//     closeBtn.click();
-// }
-
 function CargarComercios() {
     //Controla que se seleccione una localidad
     if (selectedLocalidad === "Seleccione una localidad") {
@@ -310,100 +275,87 @@ function CargarImgCooperativa(comercio) {
 }
 
 function CrearCards(comercio) {
-
     // Crear elementos HTML para la card
-    var cardContainer = document.getElementById("cardContainer");
-
-    var cardCol = document.createElement("div");
-    cardCol.classList.add("col-lg-3", "col-md-6", "mt-3");
+    var cardContainer = document.getElementById("container");
 
     var card = document.createElement("div");
-    card.classList.add("card", "mb-3", "shadow");
+    card.classList.add("card1");
 
-    var cardRow = document.createElement("div");
-    cardRow.classList.add("row", "g-0");
+    var customCard = document.createElement("div");
+    customCard.classList.add("custom-card");
 
     // Añadir el badge de dto
+
     var dtoBadge = document.createElement("div");
-    dtoBadge.style.top = "-0.8rem";
-    dtoBadge.style.left = "25%";
+    dtoBadge.classList.add("badge");
     dtoBadge.innerText = comercio.Dto + "%";
+
     if (comercio.Dto == "15") {
-        dtoBadge.classList.add("badge", "bg-primary", "text-white", "position-absolute", "w-50");
+        dtoBadge.style.backgroundColor = "#007BFF";
     } else {
-        dtoBadge.classList.add("badge", "bg-danger", "text-white", "position-absolute", "w-50");
+        dtoBadge.style.backgroundColor = "#DC3545";
     }
 
     // Añadir la imagen
-    var imgCol = document.createElement("div");
-    imgCol.classList.add("col-4", "col-md-12");
+    var imageContainer = document.createElement("div");
+    imageContainer.classList.add("image-container");
 
     var img = document.createElement("img");
-    // img.src = "./img/e36258b3c74f08054a974a5fe1703f9c.jpg";
     if (comercio.ImgComercio == "") {
         img.src = "./img/" + comercio.Rubro + ".png";
     } else {
         img.src = "./img/" + comercio.ImgComercio + ".jpg";
     }
-    img.classList.add("img-fluid");
-    img.style.height = "200px";
-    img.style.width = "300px";
-    imgCol.appendChild(img)
-    // Añadir el contenido de la card
-    var contentCol = document.createElement("div");
-    contentCol.classList.add("col-8", "col-md-12");
+    
+    imageContainer.appendChild(img);
+    customCard.appendChild(imageContainer);
+    customCard.appendChild(dtoBadge);
+    
 
-    var cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "pt-md-0");
-
-    var comercioTitle = document.createElement("h6");
-    comercioTitle.classList.add("fw-bold", "text-truncate", "text-center");
-    comercioTitle.innerText = comercio.NomComercio;
+    var cardContent = document.createElement("div");
+    cardContent.classList.add("card-content");
+    
+    var NomComercio = document.createElement("h6");
+    NomComercio.classList.add("nomComercio","text-truncate");
+    NomComercio.innerText = comercio.NomComercio;
 
     var hr = document.createElement("hr");
-    hr.style.border = "1px solid #4273b4";
+    hr.classList.add("custom-hr");
 
     var rubroP = document.createElement("p");
-    rubroP.classList.add("text-truncate", "mb-1");
+    rubroP.classList.add("text-truncate");
     rubroP.innerText = comercio.Rubro;
 
     var dirP = document.createElement("p");
-    dirP.classList.add("text-truncate", "mb-1");
+    dirP.classList.add("text-truncate");
     dirP.innerText = comercio.Direccion;
 
     var localidadP = document.createElement("p");
-    localidadP.classList.add("text-truncate", "mb-1");
+    localidadP.classList.add("text-truncate");
     localidadP.innerText = comercio.Localidad;
 
     var provinciaP = document.createElement("p");
-    provinciaP.classList.add("text-truncate", "mb-1");
+    provinciaP.classList.add("text-truncate");
     provinciaP.innerText = comercio.Provincia;
 
     var nroTelP = document.createElement("p");
-    nroTelP.classList.add("text-truncate", "mb-1");
+    nroTelP.classList.add("text-truncate");
     nroTelP.style.color = "#5a5c69";
     nroTelP.innerHTML = `<i class="fas fa-phone"></i> ${comercio.Prefijo} ${comercio.NroTel}`;
 
     // Construir la estructura de la card
-    cardBody.appendChild(comercioTitle);
-    cardBody.appendChild(hr);
-    cardBody.appendChild(rubroP);
-    cardBody.appendChild(dirP);
-    cardBody.appendChild(localidadP);
-    cardBody.appendChild(provinciaP);
-    cardBody.appendChild(nroTelP);
+    
+    cardContent.appendChild(NomComercio);
+    cardContent.appendChild(hr);
+    cardContent.appendChild(rubroP);
+    cardContent.appendChild(dirP);
+    cardContent.appendChild(localidadP);
+    cardContent.appendChild(provinciaP);
+    cardContent.appendChild(nroTelP);
 
-    contentCol.appendChild(cardBody);
-
-    cardRow.appendChild(dtoBadge);
-    cardRow.appendChild(imgCol);
-    cardRow.appendChild(contentCol);
-
-    card.appendChild(cardRow);
-    cardCol.appendChild(card);
-
-    // Agregar la card al contenedor
-    cardContainer.appendChild(cardCol);
+    customCard.appendChild(cardContent);
+    cardContainer.appendChild(card)
+    card.appendChild(customCard)
 }
 
 function CrearCheckDto() {
@@ -431,34 +383,6 @@ function CrearCheckDto() {
         checkboxes.forEach(descuento => {
             // Verificar si el descuento ya ha sido agregado
             if (!descuentosAgregados[descuento]) {
-                // let checkbox = document.createElement("input");
-                // checkbox.type = "checkbox";
-                // checkbox.classList.add("form-check-input", "dto");
-                // checkbox.value = descuento;
-                // checkbox.id = descuento + "%";
-                // checkbox.checked = true;
-
-                // let label = document.createElement("label");
-                // label.className = "form-check-label";
-                // label.htmlFor = descuento + "%";
-                // label.textContent = descuento + "%";
-
-                // let divFormCheck = document.createElement("div");
-                // divFormCheck.className = "form-check";
-                // divFormCheck.appendChild(checkbox);
-                // divFormCheck.appendChild(label);
-
-                // let divCol = document.createElement("div");
-                // divCol.className = "col-4";
-                // divCol.appendChild(divFormCheck);
-
-                // checkContainer.appendChild(divCol);
-
-                // // Marcar el descuento como agregado
-                // descuentosAgregados[descuento] = true;
-
-                //---------------------------------------------------
-
                 let checkbox = document.createElement("input");
                 checkbox.classList.add("dto");
                 checkbox.type = "checkbox";
@@ -507,7 +431,9 @@ function SetMarker(comercio) {
 }
 
 function LimpiarFiltro() {
-    selectedProvincia = "Provincia de Buenos Aires";
+    buscar.value = "";
+    // selectedProvincia = "Provincia de Buenos Aires";
+    selectedProvincia = "BUENOS AIRES";
     prov.value = selectedProvincia;
     CargarLocalidades();
     selectedLocalidad = "BAHÍA BLANCA";
@@ -517,23 +443,6 @@ function LimpiarFiltro() {
     CrearCheckDto();
     //Cargar las opciones de localidades y rubros con los valores predeterminados
     //rubro.value = selectedRubro;
-
-    // Establecer el atributo selected en las opciones predeterminadas
-    var provinciaOption = document.querySelector(`#provincia option[value="${selectedProvincia}"]`);
-    var localidadOption = document.querySelector(`#localidad option[value="${selectedLocalidad}"]`);
-    var rubroOption = document.querySelector(`#rubro option[value="${selectedRubro}"]`);
-
-    if (provinciaOption) {
-        provinciaOption.selected = true;
-    }
-
-    if (localidadOption) {
-        localidadOption.selected = true;
-    }
-
-    if (rubroOption) {
-        rubroOption.selected = true;
-    }
 
     mapaVisible.checked = true;
 
@@ -557,8 +466,7 @@ function LimpiarComercios() {
     });
 
     // Elimina las cards
-    var cardContainer = document.getElementById("cardContainer");
+    var cardContainer = document.getElementById("container");
     cardContainer.innerHTML = "";
-
     map.setView([-38.7183, -62.2661], 14);
 }

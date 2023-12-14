@@ -29,10 +29,18 @@ maxZoom: 18,
         attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
     }).addTo(map);
 
-// Obtener el control de atribución actual (esquina inferior derecha)
-var attributionControl = map.attributionControl;
-attributionControl.setPrefix('Leaflet'),
-    attributionControl.addTo(map);
+    // Obtener el control de atribución actual (esquina inferior derecha)
+    var attributionControl = map.attributionControl;
+    attributionControl.setPrefix('Leaflet'),
+        attributionControl.addTo(map);
+
+    // Configuración del clúster
+    var markers = L.markerClusterGroup({
+        disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
+        spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
+    });
+    // Agregar el clúster al mapa
+    map.addLayer(markers);
 
 //#endregion
 
@@ -60,11 +68,11 @@ localidad.addEventListener("change", function () {
 rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 });
-buscar.addEventListener("input", function(){
+buscar.addEventListener("input", function () {
     CargarComercios();
 })
 //#region Analizar el archivo CSV
-fetch('./nuevo_archivo (19).csv')
+fetch('./nuevo_archivo.csv')
     .then(function (response) {
         return response.text();
     })
@@ -216,10 +224,10 @@ function CargarRubros() {
 
 function CargarComercios() {
     //Controla que se seleccione una localidad
-    if (selectedLocalidad === "Seleccione una localidad") {
-        alert("Seleccione una localidad");
-        return;
-    }
+    // if (selectedLocalidad === "Seleccione una localidad") {
+    //     alert("Seleccione una localidad");
+    //     return;
+    // }
     // Limpia los comercios que están por defecto o seleccionados previamente
     LimpiarComercios();
 
@@ -241,6 +249,7 @@ function CargarComercios() {
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
                 map.setView([comercio.Latitud, comercio.Longitud], 14);
             }
+            
         }
     });
     // Cerrar menú filtros
@@ -306,17 +315,17 @@ function CrearCards(comercio) {
     } else {
         img.src = "./img/" + comercio.ImgComercio + ".jpg";
     }
-    
+
     imageContainer.appendChild(img);
     customCard.appendChild(imageContainer);
     customCard.appendChild(dtoBadge);
-    
+
 
     var cardContent = document.createElement("div");
     cardContent.classList.add("card-content");
-    
+
     var NomComercio = document.createElement("h6");
-    NomComercio.classList.add("nomComercio","text-truncate");
+    NomComercio.classList.add("nomComercio", "text-truncate");
     NomComercio.innerText = comercio.NomComercio;
 
     var hr = document.createElement("hr");
@@ -344,7 +353,7 @@ function CrearCards(comercio) {
     nroTelP.innerHTML = `<i class="fas fa-phone"></i> ${comercio.Prefijo} ${comercio.NroTel}`;
 
     // Construir la estructura de la card
-    
+
     cardContent.appendChild(NomComercio);
     cardContent.appendChild(hr);
     cardContent.appendChild(rubroP);
@@ -406,29 +415,35 @@ function CrearCheckDto() {
     }
 }
 
-var marker = "";
+
 function SetMarker(comercio) {
-    marker = L.marker([comercio.Latitud, comercio.Longitud]).addTo(map);
-    //icono del marcador
+    var marker = L.marker([comercio.Latitud, comercio.Longitud]);
+
+    // Icono del marcador
     var customIcon = L.icon({
-        iconUrl: 'img/' + comercio.Dto + '.jpg',
+        iconUrl: 'img/' + comercio.Dto + '.png',
         iconSize: [40, 32],
         iconAnchor: [16, 40],
-        popupAnchor: [0, -40]
+        popupAnchor: [0, -40],
     });
 
     marker.setIcon(customIcon);
-    // Contenido del marcador 
-    var contenido =
-        '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
-        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
+
+    // Contenido del marcador
+    var contenido = 
+        '<b>Nombre:</b> ' +  comercio.NomComercio + '<br>' +
+        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' + 
         '<b>Dirección:</b> ' + comercio.Direccion + '<br>' +
         '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
         '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
+    
     // Asignar el contenido al marcador
     marker.bindPopup(contenido);
-    //marker.bindPopup(contenido).openPopup();
+
+    // Agregar el marcador al clúster
+    markers.addLayer(marker);
 }
+
 
 function LimpiarFiltro() {
     buscar.value = "";
@@ -458,12 +473,8 @@ function LimpiarFiltro() {
 }
 
 function LimpiarComercios() {
-    // Elimina el marcador
-    map.eachLayer(function (layer) {
-        if (layer instanceof L.Marker) {
-            map.removeLayer(layer);
-        }
-    });
+    // Elimina todos los marcadores del grupo de clúster
+    markers.clearLayers();
 
     // Elimina las cards
     var cardContainer = document.getElementById("container");

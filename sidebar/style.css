@@ -306,7 +306,7 @@ body.sidebar-opened {
 .navbar-collapse {
     flex-grow: 0 !important;
 }
-.container {
+#container{
     /* max-width: 1200px; */
     margin: 0 auto;
     padding: 12px;
@@ -315,6 +315,9 @@ body.sidebar-opened {
     justify-content: flex-start;
 
     align-items: center;
+    height: 1260px;
+    scroll-behavior: auto;
+    overflow-x: hidden;
 }
 
 .card1{

@@ -9,7 +9,8 @@ let filtro = document.getElementById("content");
 let mapa = document.getElementById("map");
 let closeBtn = document.getElementById("closeBtn");
 let img_coop = document.getElementById("imgCoope");
-
+let cardContainer = document.getElementById("container");
+let verMas = document.getElementById("cargarMasBtn");
 mapaVisible.addEventListener("change", function () {
     if (!mapaVisible.checked) {
         mapa.style.display = "none";
@@ -29,19 +30,18 @@ maxZoom: 18,
         attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
     }).addTo(map);
 
-    // Obtener el control de atribución actual (esquina inferior derecha)
-    var attributionControl = map.attributionControl;
-    attributionControl.setPrefix('Leaflet'),
-        attributionControl.addTo(map);
+// Obtener el control de atribución actual (esquina inferior derecha)
+var attributionControl = map.attributionControl;
+attributionControl.setPrefix('Leaflet'),
+    attributionControl.addTo(map);
 
-    // Configuración del clúster
-    var markers = L.markerClusterGroup({
-        disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
-        spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
-    });
-    // Agregar el clúster al mapa
-    map.addLayer(markers);
-
+// Configuración del clúster
+var markers = L.markerClusterGroup({
+    disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
+    spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
+});
+// Agregar el clúster al mapa
+map.addLayer(markers);
 //#endregion
 
 // Objeto para hacer un seguimiento de las provincias, localidades, rubros e imagenes procesadas
@@ -55,22 +55,32 @@ var comerciosFiltrados = [];
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
+const tarjetasPorPagina = 12;
+let tarjetasCargadas = 0;
+
 
 prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
     CargarLocalidades();
+   // tarjetasCargadas = 0;
 });
+
 localidad.addEventListener("change", function () {
     selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
     CargarRubros();
     CrearCheckDto();
+    //tarjetasCargadas = 0; // Restablecer la cantidad de tarjetas cargadas
+    verMas.style.display = "block"; // Mostrar el botón nuevamente
 });
+
 rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 });
+
 buscar.addEventListener("input", function () {
     CargarComercios();
 })
+
 //#region Analizar el archivo CSV
 fetch('./nuevo_archivo.csv')
     .then(function (response) {
@@ -224,13 +234,14 @@ function CargarRubros() {
 
 function CargarComercios() {
     //Controla que se seleccione una localidad
-    // if (selectedLocalidad === "Seleccione una localidad") {
-    //     alert("Seleccione una localidad");
-    //     return;
-    // }
+    if (selectedLocalidad === "Seleccione una localidad") {
+        alert("Seleccione una localidad");
+        return;
+    }
     // Limpia los comercios que están por defecto o seleccionados previamente
     LimpiarComercios();
-
+    let cantidadComercios = 0;
+    tarjetasCargadas = 0; // Restablecer la cantidad de tarjetas cargadas
     comerciosFiltrados.forEach(function (comercio) {
         const cumpleBuscar = buscar == "" || removeAccents(comercio.NomComercio).toLowerCase().includes(removeAccents(buscar.value).toLowerCase())
         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
@@ -242,18 +253,59 @@ function CargarComercios() {
             return checkbox.checked && comercio.Dto === checkbox.value;
         });
         //Si Cumple con los criterios
+
         if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento && cumpleBuscar) {
             SetMarker(comercio);
-            CrearCards(comercio);
+
+            if (tarjetasCargadas < tarjetasPorPagina) {
+                CrearCards(comercio);
+                // cargarMasCards()
+                tarjetasCargadas++;
+                cantidadComercios++; // Incrementar la cantidad de comercios
+            }
             CargarImgCooperativa(comercio);
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
-                map.setView([comercio.Latitud, comercio.Longitud], 14);
+                // map.setView([comercio.Latitud, comercio.Longitud], 14);
+                map.setView([-38.7183, -62.2661], 14);
             }
-            
         }
     });
     // Cerrar menú filtros
     closeBtn.click();
+    mostrarMensajeNoResultados(cantidadComercios)
+}
+
+function mostrarMensajeNoResultados(cantidadComercios) {
+    let mensajeNoResultados = document.getElementById("div");
+
+    if (cantidadComercios === 0) {
+        mensajeNoResultados.innerText = "No se obtuvieron resultados.";
+    } else {
+        mensajeNoResultados.innerText = ""; // Limpiar el mensaje si hay resultados
+        verMas.style.display = "block"; // Mostrar el botón nuevamente
+    }
+}
+
+function cargarMasCards() {
+    // Filtrar comercios por la localidad seleccionada
+    const comerciosLocalidad = comerciosFiltrados.filter(function (comercio) {
+        return comercio.Localidad === selectedLocalidad;
+    });
+
+    // Llamar a la función CrearCards con los parámetros necesarios
+    const tarjetasAVisualizar = comerciosLocalidad.slice(tarjetasCargadas, (tarjetasCargadas + tarjetasPorPagina));
+
+    tarjetasAVisualizar.forEach(function (comercio) {
+        CrearCards(comercio);
+    });
+
+    // Actualizar la cantidad de tarjetas cargadas
+    tarjetasCargadas += tarjetasPorPagina;
+
+    // Ocultar el botón si no hay más tarjetas por cargar
+    if (tarjetasCargadas >= comerciosLocalidad.length) {
+        verMas.style.display = "none";
+    }
 }
 
 function removeAccents(str) {
@@ -285,8 +337,7 @@ function CargarImgCooperativa(comercio) {
 
 function CrearCards(comercio) {
     // Crear elementos HTML para la card
-    var cardContainer = document.getElementById("container");
-
+    //var cardContainer = document.getElementById("container");
     var card = document.createElement("div");
     card.classList.add("card1");
 
@@ -319,7 +370,6 @@ function CrearCards(comercio) {
     imageContainer.appendChild(img);
     customCard.appendChild(imageContainer);
     customCard.appendChild(dtoBadge);
-
 
     var cardContent = document.createElement("div");
     cardContent.classList.add("card-content");
@@ -363,8 +413,8 @@ function CrearCards(comercio) {
     cardContent.appendChild(nroTelP);
 
     customCard.appendChild(cardContent);
-    cardContainer.appendChild(card)
-    card.appendChild(customCard)
+    cardContainer.appendChild(card);
+    card.appendChild(customCard);
 }
 
 function CrearCheckDto() {
@@ -415,7 +465,6 @@ function CrearCheckDto() {
     }
 }
 
-
 function SetMarker(comercio) {
     var marker = L.marker([comercio.Latitud, comercio.Longitud]);
 
@@ -430,20 +479,19 @@ function SetMarker(comercio) {
     marker.setIcon(customIcon);
 
     // Contenido del marcador
-    var contenido = 
-        '<b>Nombre:</b> ' +  comercio.NomComercio + '<br>' +
-        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' + 
+    var contenido =
+        '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
+        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
         '<b>Dirección:</b> ' + comercio.Direccion + '<br>' +
         '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
         '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
-    
+
     // Asignar el contenido al marcador
     marker.bindPopup(contenido);
 
     // Agregar el marcador al clúster
     markers.addLayer(marker);
 }
-
 
 function LimpiarFiltro() {
     buscar.value = "";
@@ -458,6 +506,7 @@ function LimpiarFiltro() {
     CrearCheckDto();
     //Cargar las opciones de localidades y rubros con los valores predeterminados
     //rubro.value = selectedRubro;
+    tarjetasCargadas = 0;
 
     mapaVisible.checked = true;
 
@@ -481,3 +530,5 @@ function LimpiarComercios() {
     cardContainer.innerHTML = "";
     map.setView([-38.7183, -62.2661], 14);
 }
+
+

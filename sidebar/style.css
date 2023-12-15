@@ -314,10 +314,10 @@ body.sidebar-opened {
     flex-wrap: wrap;
     justify-content: flex-start;
 
-    align-items: center;
-    height: 1260px;
-    scroll-behavior: auto;
-    overflow-x: hidden;
+    /* align-items: center; */
+    /* height: 1260px; */
+    /* scroll-behavior: auto;
+    overflow-x: hidden; */
 }
 
 .card1{
@@ -330,6 +330,7 @@ body.sidebar-opened {
     padding: 0 12px 12px 12px;
     margin-bottom: 16px; 
     max-width: 270px;
+    max-height: 400px;
 }
 
 .custom-card {
@@ -400,6 +401,21 @@ body.sidebar-opened {
 
     font-weight: bold;
 }
+.load-more-container {
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+#div{
+    display: flex;
+    justify-content: center;
+}
+/* #cargarMasBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+} */
 /* @media (min-width: 993px)  and (max-width: 1100px) {
     .container{
         max-width: 900px;

@@ -37,7 +37,7 @@ attributionControl.setPrefix('Leaflet'),
 
 // Configuración del clúster
 var markers = L.markerClusterGroup({
-    disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
+    disableClusteringAtZoom: 17, // Desactivar agrupamiento en el nivel máximo de zoom
     spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
 });
 // Agregar el clúster al mapa
@@ -265,8 +265,8 @@ function CargarComercios() {
             }
             CargarImgCooperativa(comercio);
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
-                // map.setView([comercio.Latitud, comercio.Longitud], 14);
-                map.setView([-38.7183, -62.2661], 14);
+                map.setView([comercio.Latitud, comercio.Longitud], 14);
+                // map.setView([-38.7183, -62.2661], 14);
             }
         }
     });

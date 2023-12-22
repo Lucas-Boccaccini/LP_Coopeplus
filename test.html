@@ -1,106 +1,261 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="sidebar/style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Coopeplus - Beneficios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./sidebar/style.css">
+
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" /> -->
     
-    <title>Ejemplo con Cuadros de Colores</title>
 </head>
 
-<body onload="loadMoreCards()">
+<body class="bg-light">
+    <header data-bs-theme="dark">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://www.coopeplus.com.ar/">
+                    <img src="./img/logo-coopeplus.png" alt="" width="140px">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="https://www.coopeplus.com.ar/Home/Cats">CENTROS DE
+                                ATENCIÓN</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white"
+                                href="https://www.coopeplus.com.ar/Account/LoginUsuario">CENTRO DE CONSULTAS ONLINE</a>
+                        </li>
 
-    <section class="container" id="container" >
-        
-    </section>
-    <div class="load-more-container">
-        <button id="loadMoreBtn" onclick="loadMoreCards()">Ver más</button>
-    </div>
-    <script>
-        function loadMoreCards() {
-            var cardContainer = document.getElementById("container");
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div id="sidebar">
+            <div id="sidebar-header">
+                <h3>Filtro</h3>
+                <a id="closeBtn" onclick="toggleSidebar()"><i class="fas fa-xmark fa-xl"></i></a>
+            </div>
+            <div class="sidebar-body">
+                <div class="form-group">
+                    <label class="label" for="provId">Provincia:</label>
+                    <select id="provId" name="provId" required>
+                        <option value="-1" disabled selected>Selecciona tu Provincia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="label" for="localidadId">Localidad:</label>
+                    <select id="localidadId" name="localidadId" required>
+                        <option value="-1" disabled selected>Selecciona tu localidad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="label" for="rubroId">Rubro:</label>
+                    <select id="rubroId" name="rubroId" required>
+                        <option selected>TODOS</option>
+                    </select>
+                </div>
+                <div class="form-dto">
+                    <label class="label">Porcetaje de descuento:</label>
+                    <div id="checkContainer"></div>
+                </div>
+                <div id="toggleContainer" style="margin-bottom: 10px;">
+                    <span id="toggleLabel">Mostrar mapa:</span>
+                    <label id="toggleSwitch" class="switch">
+                        <input type="checkbox" id="toggleCheckbox" checked>
+                        <span id="toggleSlider" class="slider"></span>
+                    </label>
+                </div>
+                <div class="div-btn">
+                    <button class="btn-outline" onclick="LimpiarFiltro()">Limpiar</button>
+                    <button class="btn-fill" onclick="CargarComercios()">Aplicar</button>
+                </div>
+            </div>
+        </div>
+        <div id="map" style="height: 400px;"></div>
 
-            // Agregar más tarjetas al contenedor
-            for (let i = 0; i < 4; i++) {
+        <div id="overlay" onclick="toggleSidebar()"></div>
 
-                var card = document.createElement("div");
-                card.classList.add("card1");
+        <div id="content">
+            <div class="main-menu">
+                <div class="buscar">
+                    <input type="text" name="" id="inputBuscar" placeholder="Buscar...">
+                    <button class="btnBuscar" onclick="CargarComercios()">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+                <button class="btn-outline" id="menuBtn">Filtros <i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
 
-                var customCard = document.createElement("div");
-                customCard.classList.add("custom-card");
+        <!-- Cards -->
+        <div id="div"></div>
+        <section class="container" id="container"></section>
+        <!-- Btn "Ver más" -->
+        <div class="load-more-container">
+            <button id="cargarMasBtn" class="btn-fill mb-2 w-25" onclick="cargarMasCards()">Ver más</button>
+        </div>
+        <!-- Img cooperativa -->
+        <a id="imgCoope"></a>
 
-                // Añadir el badge de dto
-
-                var dtoBadge = document.createElement("div");
-                dtoBadge.classList.add("badge");
-                dtoBadge.innerText = 15 + "%";
-
-             
-                dtoBadge.style.backgroundColor = "#007BFF";
-               
-                // Añadir la imagen
-                var imageContainer = document.createElement("div");
-                imageContainer.classList.add("image-container");
-
-                var img = document.createElement("img");
-                
-                    img.src = "./img/CooperativaObrera.jpg";
-
-                imageContainer.appendChild(img);
-                customCard.appendChild(imageContainer);
-                customCard.appendChild(dtoBadge);
-
-
-                var cardContent = document.createElement("div");
-                cardContent.classList.add("card-content");
-
-                var NomComercio = document.createElement("h6");
-                NomComercio.classList.add("nomComercio", "text-truncate");
-                NomComercio.innerText = "comercio nombre";
-
-                var hr = document.createElement("hr");
-                hr.classList.add("custom-hr");
-
-                var rubroP = document.createElement("p");
-                rubroP.classList.add("text-truncate");
-                rubroP.innerText = "comercio.Rubro";
-
-                var dirP = document.createElement("p");
-                dirP.classList.add("text-truncate");
-                dirP.innerText = "comercio.Direccion";
-
-                var localidadP = document.createElement("p");
-                localidadP.classList.add("text-truncate");
-                localidadP.innerText = "comercio.Localidad";
-
-                var provinciaP = document.createElement("p");
-                provinciaP.classList.add("text-truncate");
-                provinciaP.innerText = "comercio.Provincia";
-
-                var nroTelP = document.createElement("p");
-                nroTelP.classList.add("text-truncate");
-                nroTelP.style.color = "#5a5c69";
-                nroTelP.innerHTML = "123456789";
-
-                // Construir la estructura de la card
-
-                cardContent.appendChild(NomComercio);
-                cardContent.appendChild(hr);
-                cardContent.appendChild(rubroP);
-                cardContent.appendChild(dirP);
-                cardContent.appendChild(localidadP);
-                cardContent.appendChild(provinciaP);
-                cardContent.appendChild(nroTelP);
-
-                customCard.appendChild(cardContent);
-                cardContainer.appendChild(card)
-                card.appendChild(customCard)
-            }
-        }
-
-    </script>
+        <footer>
+            <section class="container-fluid d-flex justify-content-center" style="background-color: #dc3545!important;">
+                <a href="https://www.coopeplus.com.ar/Home/Consultas" class="mr-2 pr-4 py-3 text-decoration-none"
+                    style="color: #ffffff;">CONSULTAS</a>
+                <div class="border border-left mx-5" style="color:#FFF"></div>
+                <a href="https://www.coopeplus.com.ar/Home/InformacionUsuarioFinanciero"
+                    class="h-100 pl-3 py-3 text-decoration-none border-left border-white h-100"
+                    style="color: #ffffff;">INFORMACIÓN AL USUARIO FINANCIERO</a>
+            </section>
+            <p style="text-align: center; font-size: 12px; background: #004f9f; padding: 5px; margin: 0;">
+                <a href="https://www.coopeplus.com.ar/Home/ContratoAdhesion" target="_self" style="color: white;">
+                    Contratos de adhesión - Ley Nº 24.240 de Defensa al Consumidor
+                </a>
+            </p>
+            <section class="container py-5 px-5 w-75">
+                <div class="row mx-n5 align-items-center justify-content-center">
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="https://www.cooperativaobrera.coop/" target="_blank" rel="noopener noreferrer">
+                            <img src="./img/coopelogogris.png" class="img-fluid" alt="Coope">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="https://bahiablancaplazashopping.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="./img/bbplaza.png" class="img-fluid" alt="bbplaza">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="https://www.tarjetabbps.com.ar" target="_blank" rel="noopener noreferrer">
+                            <img src="./img/tarjetbbps.png" class="img-fluid" alt="tarjetbbps">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 px-lg-5 py-3 text-center">
+                        <a href="http://coopeviajes.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="./img/coopeviajes.png" class="img-fluid" alt="Coope">
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <section class="container py-4 border-top border-light">
+                <div class="row flex-column flex-md-row">
+                    <div class="col col-md-3 my-2 d-flex flex-column justify-content-around order-3">
+                        <div>
+                            <a href="http://www.bcra.gob.ar/BCRAyvos/usuarios_financieros.asp" target="_blank"
+                                rel="noopener noreferrer">
+                                <img src="./img/usuariosfinanciers.png" class="img-fluid" alt="Usuarios Financieros">
+                            </a>
+                        </div>
+                        <div class="text-md-center">
+                            <a href="http://qr.afip.gob.ar/?qr=Lo5ruwccz5mMxrokHtaRVw,," target="_F960AFIPInfo"
+                                rel="noopener noreferrer">
+                                <img src="./img/data-fiscal.jpg" class="img-fluid " alt="data fiscal AFIP"
+                                    style="height:135px">
+                            </a>
+                        </div>
+                        <div class="text-md-center text-dark font-weight-lighter fontPie">
+                            <a href="https://www.coopeplus.com.ar/Home/DatosPersonales"
+                                class="text-decoration-none text-dark">Datos personales</a>
+                        </div>
+                    </div>
+                    <div class="col col-md-6 col-auto my-2 paddingLeftPie order-2">
+                        <h4 class="text-muted">CONTACTO</h4>
+                        <ul class="list-unstyled mt-2 fontPie">
+                            <li class="row mb-2">
+                                <i class="bi bi-geo-alt-fill text-muted col-1" style="font-size: 25px;"></i>
+                                <div class="col-11">
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Casa Central 19 de Mayo
+                                        271
+                                        Tel.
+                                        <a href="tel:+5492914550396"
+                                            class="text-decoration-none text-dark marginPie">0291-4550396</a>
+                                    </p><br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Bahía Blanca de Lunes a
+                                        Viernes
+                                        de 8 a 17 hs.</p>
+                                </div>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-envelope-fill text-muted col-1" style="font-size: 25px;"></i>
+                                <div class="col-11">
+                                    <p class="text-dark font-weight-lighter d-inline ml-3"><a
+                                            href="mailto:comercial@nuevacard.com.ar"
+                                            class="text-decoration-none text-dark">comercial@nuevacard.com.ar</a>
+                                    </p>
+                                    <br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17
+                                        Hs.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-whatsapp text-muted col-1" style="font-size: 25px;"></i>
+                                <div class="col-11">
+                                    <p class="text-dark font-weight-lighter d-inline ml-3"><a
+                                            href="https://api.whatsapp.com/send?phone=5492914250963&amp;text=&amp;source=&amp;data=&amp;app_absent="
+                                            target="_blank" class="text-decoration-none text-dark"
+                                            rel="noopener noreferrer">0291-4250963</a></p><br>
+                                    <p class="text-dark font-weight-lighter d-inline ml-3">Lunes a Viernes de 8 a 17
+                                        Hs.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-phone text-muted col-1" style="font-size: 25px;"></i>
+                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a
+                                        href="tel:+54908103334343"
+                                        class="text-decoration-none text-dark">0810-333-4343</a></p>
+                            </li>
+                            <li class="row mb-2">
+                                <i class="bi bi-phone text-muted col-1" style="font-size: 25px;"></i>
+                                <p class="text-dark font-weight-lighter d-inline ml-4 col-11"><a
+                                        href="tel:+54908009997447"
+                                        class="text-decoration-none text-dark">0800-999-7447</a> Todos los días de 9
+                                    a
+                                    21 Hs. </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col col-md-3 my-2 order-1">
+                        <h4 class="text-muted">QUIÉNES SOMOS</h4>
+                        <ul class="list-unstyled mt-2 fontPie">
+                            <li class="mb-2">
+                                <p class="text-dark font-weight-lighter d-inline ml-0"><a
+                                        href="https://www.coopeplus.com.ar/Home/QuienesSomos"
+                                        class="text-decoration-none text-dark">Nuestra tarjeta</a></p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </footer>
+    </main>
+    <!-- BS5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- fontawesome -->
+    
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <!-- JS -->
+    <!-- <script src="script.js"></script> -->
+    <script src="copia.js"></script>
+    <!-- JS Sidebar -->
+    <script src="./sidebar/script.js"></script>
 </body>
 
 </html>
-

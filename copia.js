@@ -10,7 +10,7 @@ let mapa = document.getElementById("map");
 let closeBtn = document.getElementById("closeBtn");
 let img_coop = document.getElementById("imgCoope");
 let cardContainer = document.getElementById("container");
-
+let verMas = document.getElementById("cargarMasBtn");
 mapaVisible.addEventListener("change", function () {
     if (!mapaVisible.checked) {
         mapa.style.display = "none";
@@ -23,25 +23,25 @@ mapaVisible.addEventListener("change", function () {
 
 //#region Configuaracion mapa
 
-var map = L.map('map').setView([-38.7183, -62.2661], 14);
-maxZoom: 18,
+// var map = L.map('map').setView([-38.7183, -62.2661], 14);
+// maxZoom: 18,
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
-    }).addTo(map);
+//     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//         attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+//     }).addTo(map);
 
-    // Obtener el control de atribución actual (esquina inferior derecha)
-    var attributionControl = map.attributionControl;
-    attributionControl.setPrefix('Leaflet'),
-        attributionControl.addTo(map);
+// Obtener el control de atribución actual (esquina inferior derecha)
+// var attributionControl = map.attributionControl;
+// attributionControl.setPrefix('Leaflet'),
+//     attributionControl.addTo(map);
 
-    // Configuración del clúster
-    var markers = L.markerClusterGroup({
-        disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
-        spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
-    });
-    // Agregar el clúster al mapa
-    map.addLayer(markers);
+// Configuración del clúster
+// var markers = L.markerClusterGroup({
+//     disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
+//    // spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
+// });
+// Agregar el clúster al mapa
+//map.addLayer(markers);
 //#endregion
 
 // Objeto para hacer un seguimiento de las provincias, localidades, rubros e imagenes procesadas
@@ -55,60 +55,70 @@ var comerciosFiltrados = [];
 var selectedProvincia = (prov.options[prov.selectedIndex]).text;
 var selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
 var selectedRubro = (rubro.options[rubro.selectedIndex]).text;
+const tarjetasPorPagina = 12;
+let tarjetasCargadas = 0;
+
 
 prov.addEventListener("change", function () {
     selectedProvincia = (prov.options[prov.selectedIndex]).text;
     CargarLocalidades();
+   // tarjetasCargadas = 0;
 });
+
 localidad.addEventListener("change", function () {
     selectedLocalidad = (localidad.options[localidad.selectedIndex]).text;
     CargarRubros();
     CrearCheckDto();
+    //tarjetasCargadas = 0; // Restablecer la cantidad de tarjetas cargadas
+    verMas.style.display = "block"; // Mostrar el botón nuevamente
 });
+
 rubro.addEventListener("change", function () {
     selectedRubro = (rubro.options[rubro.selectedIndex]).text;
 });
+
 buscar.addEventListener("input", function () {
     CargarComercios();
-})
+});
+
 //#region Analizar el archivo CSV
-fetch('./nuevo_archivo.csv')
-    .then(function (response) {
-        return response.text();
-    })
-    .then(function (csv) {
-        // Analiza los datos CSV en formato JSON
-        var jsonData = Papa.parse(csv, { header: true, skipEmptyLines: true });
-        // Mapea los datos del CSV a objetos con la misma estructura que los objetos 'comercios'
-        var comercios = jsonData.data.map(function (row) {
-            return {
-                Localidad: row.Localidad,
-                Rubro: row.Rubro,
-                NomComercio: row.NomComercio,
-                Direccion: row.Direccion,
-                Prefijo: row.Prefijo,
-                NroTel: row.NroTel,
-                Dto: row.Dto,
-                ImgCoop: row.ImgCoop,
-                ImgCoopLink: row.ImgCoopLink,
-                ImgComercio: row.ImgComercio,
-                Latitud: row.Latitud,
-                Longitud: row.Longitud,
-                Provincia: row.Provincia
-            };
-        });
-        // Recorre el CSV y crea marcadores
-        comercios.forEach(function (comercio) {
-            // Almacena el comercio filtrado
-            comerciosFiltrados.push(comercio);
-        });
-        CargarProvincias();
-        CargarComercios();
-        PrimeraCarga = true;
-    })
-    .catch(function (error) {
-        console.error("Error al cargar el CSV:", error);
-    });
+// fetch('./nuevo_archivo (25).csv')
+//     .then(function (response) {
+//         return response.text();
+//     })
+//     .then(function (csv) {
+//         // Analiza los datos CSV en formato JSON
+//         var jsonData = Papa.parse(csv, { header: true, skipEmptyLines: true });
+//         // Mapea los datos del CSV a objetos con la misma estructura que los objetos 'comercios'
+//         var comercios = jsonData.data.map(function (row) {
+//             return {
+//                 Localidad: row.Localidad,
+//                 Rubro: row.Rubro,
+//                 NomComercio: row.NomComercio,
+//                 Direccion: row.Direccion,
+//                 Prefijo: row.Prefijo,
+//                 NroTel: row.NroTel,
+//                 Dto: row.Dto,
+//                 ImgCoop: row.ImgCoop,
+//                 ImgCoopLink: row.ImgCoopLink,
+//                 ImgComercio: row.ImgComercio,
+//                 Latitud: row.Latitud,
+//                 Longitud: row.Longitud,
+//                 Provincia: row.Provincia
+//             };
+//         });
+//         // Recorre el CSV y crea marcadores
+//         comercios.forEach(function (comercio) {
+//             // Almacena el comercio filtrado
+//             comerciosFiltrados.push(comercio);
+//         });
+//         CargarProvincias();
+//         CargarComercios();
+//         PrimeraCarga = true;
+//     })
+//     .catch(function (error) {
+//         console.error("Error al cargar el CSV:", error);
+//     });
 //#endregion
 
 function CargarProvincias() {
@@ -230,7 +240,8 @@ function CargarComercios() {
     }
     // Limpia los comercios que están por defecto o seleccionados previamente
     LimpiarComercios();
-
+    let cantidadComercios = 0;
+    tarjetasCargadas = 0; // Restablecer la cantidad de tarjetas cargadas
     comerciosFiltrados.forEach(function (comercio) {
         const cumpleBuscar = buscar == "" || removeAccents(comercio.NomComercio).toLowerCase().includes(removeAccents(buscar.value).toLowerCase())
         const cumpleProvincia = selectedProvincia === "Seleccione una provincia" || comercio.Provincia === selectedProvincia;
@@ -242,17 +253,59 @@ function CargarComercios() {
             return checkbox.checked && comercio.Dto === checkbox.value;
         });
         //Si Cumple con los criterios
+
         if (cumpleProvincia && cumpleLocalidad && cumpleRubro && cumpleDescuento && cumpleBuscar) {
             SetMarker(comercio);
-            CrearCards(comercio);
+
+            if (tarjetasCargadas < tarjetasPorPagina) {
+                CrearCards(comercio);
+                // cargarMasCards()
+                tarjetasCargadas++;
+                cantidadComercios++; // Incrementar la cantidad de comercios
+            }
             CargarImgCooperativa(comercio);
             if (selectedLocalidad != "Seleccione una provincia" && selectedProvincia != "Seleccione una localidad") {
                 map.setView([comercio.Latitud, comercio.Longitud], 14);
+                // map.setView([-38.7183, -62.2661], 14);
             }
         }
     });
     // Cerrar menú filtros
     closeBtn.click();
+    mostrarMensajeNoResultados(cantidadComercios)
+}
+
+function mostrarMensajeNoResultados(cantidadComercios) {
+    let mensajeNoResultados = document.getElementById("div");
+
+    if (cantidadComercios === 0) {
+        mensajeNoResultados.innerText = "No se obtuvieron resultados.";
+    } else {
+        mensajeNoResultados.innerText = ""; // Limpiar el mensaje si hay resultados
+        verMas.style.display = "block"; // Mostrar el botón nuevamente
+    }
+}
+
+function cargarMasCards() {
+    // Filtrar comercios por la localidad seleccionada
+    const comerciosLocalidad = comerciosFiltrados.filter(function (comercio) {
+        return comercio.Localidad === selectedLocalidad;
+    });
+
+    // Llamar a la función CrearCards con los parámetros necesarios
+    const tarjetasAVisualizar = comerciosLocalidad.slice(tarjetasCargadas, (tarjetasCargadas + tarjetasPorPagina));
+
+    tarjetasAVisualizar.forEach(function (comercio) {
+        CrearCards(comercio);
+    });
+
+    // Actualizar la cantidad de tarjetas cargadas
+    tarjetasCargadas += tarjetasPorPagina;
+
+    // Ocultar el botón si no hay más tarjetas por cargar
+    if (tarjetasCargadas >= comerciosLocalidad.length) {
+        verMas.style.display = "none";
+    }
 }
 
 function removeAccents(str) {
@@ -285,86 +338,83 @@ function CargarImgCooperativa(comercio) {
 function CrearCards(comercio) {
     // Crear elementos HTML para la card
     //var cardContainer = document.getElementById("container");
-    // for (let i = 0; i < 4; i++) {
+    var card = document.createElement("div");
+    card.classList.add("card1");
 
-        var card = document.createElement("div");
-        card.classList.add("card1");
+    var customCard = document.createElement("div");
+    customCard.classList.add("custom-card");
 
-        var customCard = document.createElement("div");
-        customCard.classList.add("custom-card");
+    // Añadir el badge de dto
 
-        // Añadir el badge de dto
+    var dtoBadge = document.createElement("div");
+    dtoBadge.classList.add("badge");
+    dtoBadge.innerText = comercio.Dto + "%";
 
-        var dtoBadge = document.createElement("div");
-        dtoBadge.classList.add("badge");
-        dtoBadge.innerText = comercio.Dto + "%";
+    if (comercio.Dto == "15") {
+        dtoBadge.style.backgroundColor = "#007BFF";
+    } else {
+        dtoBadge.style.backgroundColor = "#DC3545";
+    }
 
-        if (comercio.Dto == "15") {
-            dtoBadge.style.backgroundColor = "#007BFF";
-        } else {
-            dtoBadge.style.backgroundColor = "#DC3545";
-        }
+    // Añadir la imagen
+    var imageContainer = document.createElement("div");
+    imageContainer.classList.add("image-container");
 
-        // Añadir la imagen
-        var imageContainer = document.createElement("div");
-        imageContainer.classList.add("image-container");
+    var img = document.createElement("img");
+    if (comercio.ImgComercio == "") {
+        img.src = "./img/rubros/" + comercio.Rubro + ".png";
+    } else {
+        img.src = "./img/comercios/" + comercio.ImgComercio + ".jpg";
+    }
 
-        var img = document.createElement("img");
-        if (comercio.ImgComercio == "") {
-            img.src = "./img/" + comercio.Rubro + ".png";
-        } else {
-            img.src = "./img/" + comercio.ImgComercio + ".jpg";
-        }
+    imageContainer.appendChild(img);
+    customCard.appendChild(imageContainer);
+    customCard.appendChild(dtoBadge);
 
-        imageContainer.appendChild(img);
-        customCard.appendChild(imageContainer);
-        customCard.appendChild(dtoBadge);
+    var cardContent = document.createElement("div");
+    cardContent.classList.add("card-content");
 
-        var cardContent = document.createElement("div");
-        cardContent.classList.add("card-content");
+    var NomComercio = document.createElement("h6");
+    NomComercio.classList.add("nomComercio", "text-truncate");
+    NomComercio.innerText = comercio.NomComercio;
 
-        var NomComercio = document.createElement("h6");
-        NomComercio.classList.add("nomComercio", "text-truncate");
-        NomComercio.innerText = comercio.NomComercio;
+    var hr = document.createElement("hr");
+    hr.classList.add("custom-hr");
 
-        var hr = document.createElement("hr");
-        hr.classList.add("custom-hr");
+    var rubroP = document.createElement("p");
+    rubroP.classList.add("text-truncate");
+    rubroP.innerText = comercio.Rubro;
 
-        var rubroP = document.createElement("p");
-        rubroP.classList.add("text-truncate");
-        rubroP.innerText = comercio.Rubro;
+    var dirP = document.createElement("p");
+    dirP.classList.add("text-truncate");
+    dirP.innerText = comercio.Direccion;
 
-        var dirP = document.createElement("p");
-        dirP.classList.add("text-truncate");
-        dirP.innerText = comercio.Direccion;
+    var localidadP = document.createElement("p");
+    localidadP.classList.add("text-truncate");
+    localidadP.innerText = comercio.Localidad;
 
-        var localidadP = document.createElement("p");
-        localidadP.classList.add("text-truncate");
-        localidadP.innerText = comercio.Localidad;
+    var provinciaP = document.createElement("p");
+    provinciaP.classList.add("text-truncate");
+    provinciaP.innerText = comercio.Provincia;
 
-        var provinciaP = document.createElement("p");
-        provinciaP.classList.add("text-truncate");
-        provinciaP.innerText = comercio.Provincia;
+    var nroTelP = document.createElement("p");
+    nroTelP.classList.add("text-truncate");
+    nroTelP.style.color = "#5a5c69";
+    nroTelP.innerHTML = `<i class="fas fa-phone"></i> ${comercio.Prefijo} ${comercio.NroTel}`;
 
-        var nroTelP = document.createElement("p");
-        nroTelP.classList.add("text-truncate");
-        nroTelP.style.color = "#5a5c69";
-        nroTelP.innerHTML = `<i class="fas fa-phone"></i> ${comercio.Prefijo} ${comercio.NroTel}`;
+    // Construir la estructura de la card
 
-        // Construir la estructura de la card
+    cardContent.appendChild(NomComercio);
+    cardContent.appendChild(hr);
+    cardContent.appendChild(rubroP);
+    cardContent.appendChild(dirP);
+    cardContent.appendChild(localidadP);
+    cardContent.appendChild(provinciaP);
+    cardContent.appendChild(nroTelP);
 
-        cardContent.appendChild(NomComercio);
-        cardContent.appendChild(hr);
-        cardContent.appendChild(rubroP);
-        cardContent.appendChild(dirP);
-        cardContent.appendChild(localidadP);
-        cardContent.appendChild(provinciaP);
-        cardContent.appendChild(nroTelP);
-
-        customCard.appendChild(cardContent);
-        cardContainer.appendChild(card)
-        card.appendChild(customCard)
-    // }
+    customCard.appendChild(cardContent);
+    cardContainer.appendChild(card);
+    card.appendChild(customCard);
 }
 
 function CrearCheckDto() {
@@ -415,33 +465,33 @@ function CrearCheckDto() {
     }
 }
 
-function SetMarker(comercio) {
-    var marker = L.marker([comercio.Latitud, comercio.Longitud]);
+// function SetMarker(comercio) {
+//     var marker = L.marker([comercio.Latitud, comercio.Longitud]);
 
-    // Icono del marcador
-    var customIcon = L.icon({
-        iconUrl: 'img/' + comercio.Dto + '.png',
-        iconSize: [40, 32],
-        iconAnchor: [16, 40],
-        popupAnchor: [0, -40],
-    });
+//     // Icono del marcador
+//     var customIcon = L.icon({
+//         iconUrl: 'img/' + comercio.Dto + '.png',
+//         iconSize: [40, 32],
+//         iconAnchor: [16, 40],
+//         popupAnchor: [0, -40],
+//     });
 
-    marker.setIcon(customIcon);
+//     marker.setIcon(customIcon);
 
-    // Contenido del marcador
-    var contenido = 
-        '<b>Nombre:</b> ' +  comercio.NomComercio + '<br>' +
-        '<b>Rubro:</b> ' + comercio.Rubro + '<br>' + 
-        '<b>Dirección:</b> ' + comercio.Direccion + '<br>' +
-        '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
-        '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
-    
-    // Asignar el contenido al marcador
-    marker.bindPopup(contenido);
+//     // Contenido del marcador
+//     var contenido =
+//         '<b>Nombre:</b> ' + comercio.NomComercio + '<br>' +
+//         '<b>Rubro:</b> ' + comercio.Rubro + '<br>' +
+//         '<b>Dirección:</b> ' + comercio.Direccion + '<br>' +
+//         '<b>Descuento:</b> ' + comercio.Dto + '%<br>' +
+//         '<b>Teléfono:</b> ' + comercio.Prefijo + ' ' + comercio.NroTel;
 
-    // Agregar el marcador al clúster
-    markers.addLayer(marker);
-}
+//     // Asignar el contenido al marcador
+//     marker.bindPopup(contenido);
+
+//     // Agregar el marcador al clúster
+//     markers.addLayer(marker);
+// }
 
 function LimpiarFiltro() {
     buscar.value = "";
@@ -456,6 +506,7 @@ function LimpiarFiltro() {
     CrearCheckDto();
     //Cargar las opciones de localidades y rubros con los valores predeterminados
     //rubro.value = selectedRubro;
+    tarjetasCargadas = 0;
 
     mapaVisible.checked = true;
 
@@ -472,11 +523,12 @@ function LimpiarFiltro() {
 
 function LimpiarComercios() {
     // Elimina todos los marcadores del grupo de clúster
-    markers.clearLayers();
+    //markers.clearLayers();
 
     // Elimina las cards
     var cardContainer = document.getElementById("container");
     cardContainer.innerHTML = "";
     map.setView([-38.7183, -62.2661], 14);
 }
+
 

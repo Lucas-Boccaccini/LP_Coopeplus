@@ -37,8 +37,8 @@ attributionControl.setPrefix('Leaflet'),
 
 // Configuración del clúster
 var markers = L.markerClusterGroup({
-    disableClusteringAtZoom: 17, // Desactivar agrupamiento en el nivel máximo de zoom
-    spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
+    disableClusteringAtZoom: 18, // Desactivar agrupamiento en el nivel máximo de zoom
+   // spiderfyOnMaxZoom: true  // Habilitar spiderfy en el nivel máximo de zoom
 });
 // Agregar el clúster al mapa
 map.addLayer(markers);
@@ -79,7 +79,7 @@ rubro.addEventListener("change", function () {
 
 buscar.addEventListener("input", function () {
     CargarComercios();
-})
+});
 
 //#region Analizar el archivo CSV
 fetch('./nuevo_archivo.csv')
@@ -288,8 +288,11 @@ function mostrarMensajeNoResultados(cantidadComercios) {
 
 function cargarMasCards() {
     // Filtrar comercios por la localidad seleccionada
-    const comerciosLocalidad = comerciosFiltrados.filter(function (comercio) {
-        return comercio.Localidad === selectedLocalidad;
+    // const comerciosLocalidad = comerciosFiltrados.filter(function (comercio) {
+    //     return comercio.Localidad === selectedLocalidad;
+    // });
+    const comerciosLocalidad = comerciosFiltrados.filter((c) => {
+        return c.Localidad === selectedLocalidad;
     });
 
     // Llamar a la función CrearCards con los parámetros necesarios
@@ -362,9 +365,9 @@ function CrearCards(comercio) {
 
     var img = document.createElement("img");
     if (comercio.ImgComercio == "") {
-        img.src = "./img/" + comercio.Rubro + ".png";
+        img.src = "./img/rubros/" + comercio.Rubro + ".png";
     } else {
-        img.src = "./img/" + comercio.ImgComercio + ".jpg";
+        img.src = "./img/comercios/" + comercio.ImgComercio + ".jpg";
     }
 
     imageContainer.appendChild(img);
@@ -401,7 +404,7 @@ function CrearCards(comercio) {
     nroTelP.classList.add("text-truncate");
     nroTelP.style.color = "#5a5c69";
     nroTelP.innerHTML = `<i class="fas fa-phone"></i> ${comercio.Prefijo} ${comercio.NroTel}`;
-
+    
     // Construir la estructura de la card
 
     cardContent.appendChild(NomComercio);
@@ -464,6 +467,8 @@ function CrearCheckDto() {
         });
     }
 }
+
+
 
 function SetMarker(comercio) {
     var marker = L.marker([comercio.Latitud, comercio.Longitud]);

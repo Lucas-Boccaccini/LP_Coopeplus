@@ -313,7 +313,7 @@ body.sidebar-opened {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-
+    row-gap: 20px;
     /* align-items: center; */
     /* height: 1260px; */
     /* scroll-behavior: auto;
